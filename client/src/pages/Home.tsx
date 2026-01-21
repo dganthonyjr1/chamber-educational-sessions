@@ -124,7 +124,7 @@ export default function Home() {
             {t('home.courses.title')}
           </h3>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {courses?.map((course) => (
               <Link key={course.id} href={`/course/${course.id}`}>
                 <Card className="bg-gray-900 border-gray-800 hover:border-[#ff006e] transition-all cursor-pointer group">
@@ -156,7 +156,7 @@ export default function Home() {
         {organizations && organizations.length > 0 && (
           <section className="mb-12">
             <h3 className="text-2xl font-bold mb-6 text-center">{t('home.organizations.title')}</h3>
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
               {organizations.map((org) => (
                 <Card key={org.id} className="bg-gray-900 border-gray-800 hover:border-[#00d9ff] transition-all">
                   <CardContent className="p-6 text-center">

@@ -78,3 +78,8 @@
 - [x] Translate course titles and descriptions from database
 - [x] Translate organization names and descriptions
 - [x] Ensure ALL dynamic content translates properly
+
+## Layout & Content Fixes
+- [x] Make all pages symmetrical (balanced layouts)
+- [x] Update course descriptions to match original user-provided content
+- [ ] Ensure consistent spacing and alignment across all sections
