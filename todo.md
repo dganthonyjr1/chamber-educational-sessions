@@ -83,3 +83,11 @@
 - [x] Make all pages symmetrical (balanced layouts)
 - [x] Update course descriptions to match original user-provided content
 - [ ] Ensure consistent spacing and alignment across all sections
+
+## Footer Video
+- [x] Add video link to footer section
+- [x] Ensure video link works and is bilingual
+
+## Button Improvements
+- [x] Replace generic floating icons with clear labeled buttons
+- [x] Add text labels so users know what each button does

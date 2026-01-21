@@ -228,35 +228,53 @@ export default function Home() {
             </div>
           )}
         </section>
+
+        {/* Footer */}
+        <footer className="mt-16 pt-8 border-t border-gray-800 text-center">
+          <div className="flex justify-center items-center gap-2 text-sm text-gray-400">
+            <Video className="h-4 w-4 text-[#ff006e]" />
+            <a 
+              href="https://docs.google.com/videos/d/18ya6FWoDUtOi640czhYPJ_S91BcXxrIb7rZxa6Ys6os/edit?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#ff006e] transition-colors"
+            >
+              {language === 'es' ? 'Ver Video de Introducción' : 'Watch Introduction Video'}
+            </a>
+          </div>
+          <p className="mt-4 text-xs text-gray-500">
+            © 2024 SIA AI Academy. {language === 'es' ? 'Todos los derechos reservados.' : 'All rights reserved.'}
+          </p>
+        </footer>
       </main>
 
-      {/* Floating Action Buttons */}
+      {/* Action Buttons */}
       <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
         <Button
           onClick={startRetellCall}
           size="lg"
-          className="rounded-full w-14 h-14 bg-[#ff006e] hover:bg-[#e6005f] shadow-lg"
-          title={t('voice.callButton')}
+          className="bg-[#ff006e] hover:bg-[#e6005f] shadow-lg flex items-center gap-2 px-4 py-3"
         >
-          <Phone className="h-6 w-6" />
+          <Phone className="h-5 w-5" />
+          <span className="font-semibold">{language === 'es' ? 'Coach de IA' : 'AI Coach'}</span>
         </Button>
         
         <Button
           onClick={openChatGPT}
           size="lg"
-          className="rounded-full w-14 h-14 bg-[#00d9ff] hover:bg-[#00c2e6] shadow-lg"
-          title={t('tools.chatgpt')}
+          className="bg-[#00d9ff] hover:bg-[#00c2e6] shadow-lg flex items-center gap-2 px-4 py-3 text-black"
         >
-          <MessageSquare className="h-6 w-6" />
+          <MessageSquare className="h-5 w-5" />
+          <span className="font-semibold">ChatGPT</span>
         </Button>
         
         <Button
           onClick={openZoom}
           size="lg"
-          className="rounded-full w-14 h-14 bg-[#2d8cff] hover:bg-[#2579e6] shadow-lg"
-          title={t('tools.zoom')}
+          className="bg-[#2d8cff] hover:bg-[#2579e6] shadow-lg flex items-center gap-2 px-4 py-3"
         >
-          <Video className="h-6 w-6" />
+          <Video className="h-5 w-5" />
+          <span className="font-semibold">{language === 'es' ? 'Reunión' : 'Meeting'}</span>
         </Button>
       </div>
     </div>
