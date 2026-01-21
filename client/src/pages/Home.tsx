@@ -1,5 +1,6 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useRetellAgent } from "@/hooks/useRetellAgent";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +15,7 @@ export default function Home() {
   const { user, loading, isAuthenticated } = useAuth();
   const { t, language } = useLanguage();
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const { startCall, stopCall, isCallActive, isAgentSpeaking } = useRetellAgent();
   
   const { data: courses, isLoading: coursesLoading } = trpc.courses.list.useQuery();
 
@@ -49,9 +51,12 @@ export default function Home() {
     window.open('https://zoom.us/start/videomeeting', '_blank');
   };
 
-  const startRetellCall = () => {
-    // TODO: Implement Retell AI call
-    alert('Retell AI voice call will be integrated here. Please add your RETELL_API_KEY and RETELL_AGENT_ID to environment variables.');
+  const startRetellCall = async () => {
+    if (isCallActive) {
+      stopCall();
+    } else {
+      await startCall();
+    }
   };
 
   if (loading || coursesLoading) {
@@ -64,20 +69,20 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
-      {/* Header */}
+      {/* Header - Mobile Optimized */}
       <header className="border-b border-gray-800 bg-black/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#ff006e] to-[#00d9ff] rounded-lg flex items-center justify-center font-bold">
+        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-[#ff006e] to-[#00d9ff] rounded-lg flex items-center justify-center font-bold text-xs sm:text-base">
               SIA
             </div>
             <div>
-              <h1 className="text-xl font-bold">{t('app.title')}</h1>
-              <p className="text-xs text-gray-400">{t('app.subtitle')}</p>
+              <h1 className="text-sm sm:text-xl font-bold">{t('app.title')}</h1>
+              <p className="text-[10px] sm:text-xs text-gray-400 hidden sm:block">{t('app.subtitle')}</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <LanguageToggle />
             <div className="flex items-center gap-2">
             {isAuthenticated ? (
@@ -105,26 +110,26 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
-        {/* Hero Section */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-[#ff006e] to-[#00d9ff] bg-clip-text text-transparent">
+      {/* Main Content - Mobile Optimized */}
+      <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
+        {/* Hero Section - Mobile Optimized */}
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-[#ff006e] to-[#00d9ff] bg-clip-text text-transparent px-2">
             {t('home.hero.title')}
           </h2>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+          <p className="text-base sm:text-xl text-gray-400 max-w-2xl mx-auto px-4">
             {t('home.hero.subtitle')}
           </p>
         </div>
 
-        {/* Courses Grid */}
-        <section className="mb-12">
-          <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
+        {/* Courses Grid - Mobile Optimized */}
+        <section className="mb-8 sm:mb-12">
+          <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 flex items-center gap-2">
             <Star className="h-6 w-6 text-[#ff006e]" />
             {t('home.courses.title')}
           </h3>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto">
             {courses?.map((course) => (
               <Link key={course.id} href={`/course/${course.id}`}>
                 <Card className="bg-gray-900 border-gray-800 hover:border-[#ff006e] transition-all cursor-pointer group">
@@ -256,33 +261,42 @@ export default function Home() {
         </footer>
       </main>
 
-      {/* Action Buttons */}
-      <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
+      {/* Action Buttons - Smaller & Mobile Optimized */}
+      <div className="fixed bottom-4 right-4 flex flex-col gap-2 z-50">
         <Button
           onClick={startRetellCall}
-          size="lg"
-          className="bg-[#ff006e] hover:bg-[#e6005f] shadow-lg flex items-center gap-2 px-4 py-3"
+          size="sm"
+          className={`shadow-lg flex items-center gap-1.5 px-3 py-2 text-sm ${
+            isCallActive 
+              ? 'bg-red-600 hover:bg-red-700 animate-pulse' 
+              : 'bg-[#ff006e] hover:bg-[#e6005e]'
+          }`}
         >
-          <Phone className="h-5 w-5" />
-          <span className="font-semibold">{language === 'es' ? 'Coach de IA' : 'AI Coach'}</span>
+          <Phone className={`h-4 w-4 ${isAgentSpeaking ? 'animate-bounce' : ''}`} />
+          <span className="font-medium">
+            {isCallActive 
+              ? (language === 'es' ? 'Finalizar' : 'End Call')
+              : (language === 'es' ? 'Coach' : 'AI Coach')
+            }
+          </span>
         </Button>
         
         <Button
           onClick={openChatGPT}
-          size="lg"
-          className="bg-[#00d9ff] hover:bg-[#00c2e6] shadow-lg flex items-center gap-2 px-4 py-3 text-black"
+          size="sm"
+          className="bg-[#00d9ff] hover:bg-[#00c2e6] shadow-lg flex items-center gap-1.5 px-3 py-2 text-sm text-black"
         >
-          <MessageSquare className="h-5 w-5" />
-          <span className="font-semibold">ChatGPT</span>
+          <MessageSquare className="h-4 w-4" />
+          <span className="font-medium">ChatGPT</span>
         </Button>
         
         <Button
           onClick={openZoom}
-          size="lg"
-          className="bg-[#2d8cff] hover:bg-[#2579e6] shadow-lg flex items-center gap-2 px-4 py-3"
+          size="sm"
+          className="bg-blue-600 hover:bg-blue-700 shadow-lg flex items-center gap-1.5 px-3 py-2 text-sm"
         >
-          <Video className="h-5 w-5" />
-          <span className="font-semibold">{language === 'es' ? 'Reunión' : 'Meeting'}</span>
+          <Video className="h-4 w-4" />
+          <span className="font-medium">{language === 'es' ? 'Reunión' : 'Meeting'}</span>
         </Button>
       </div>
     </div>

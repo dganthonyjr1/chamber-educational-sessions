@@ -15,6 +15,47 @@ import { nanoid } from "nanoid";
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
+  
+  retell: router({
+    getAccessToken: publicProcedure
+      .input(z.object({ agentId: z.string().optional() }).optional())
+      .mutation(async ({ input }) => {
+        const RETELL_API_KEY = process.env.RETELL_API_KEY;
+        const RETELL_AGENT_ID = input?.agentId || process.env.RETELL_AGENT_ID;
+
+        if (!RETELL_API_KEY) {
+          throw new Error('RETELL_API_KEY not configured. Please add it to Settings → Secrets.');
+        }
+
+        if (!RETELL_AGENT_ID) {
+          throw new Error('RETELL_AGENT_ID not configured. Please add it to Settings → Secrets.');
+        }
+
+        try {
+          const response = await fetch('https://api.retellai.com/v2/create-web-call', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${RETELL_API_KEY}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              agent_id: RETELL_AGENT_ID,
+            }),
+          });
+
+          if (!response.ok) {
+            const error = await response.text();
+            throw new Error(`Retell API error: ${error}`);
+          }
+
+          const data = await response.json();
+          return { accessToken: data.access_token };
+        } catch (error) {
+          console.error('[Retell] Failed to create web call:', error);
+          throw new Error('Failed to initialize voice call. Please check Retell AI credentials.');
+        }
+      }),
+  }),
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
     logout: publicProcedure.mutation(({ ctx }) => {

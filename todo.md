@@ -110,3 +110,27 @@
 - [x] Keep description in middle
 - [x] Move "Visit Website" button to bottom (centered)
 - [x] Apply to all organization cards
+
+## Button Size & Mobile Optimization
+- [x] Reduce size of AI Coach button
+- [x] Reduce size of ChatGPT button
+- [x] Reduce size of Meeting button
+- [x] Optimize Home page for mobile devices (header responsive)
+- [x] Optimize Home page hero and courses grid for mobile
+- [ ] Optimize Course page for mobile devices
+- [ ] Optimize Quiz page for mobile devices
+- [ ] Optimize Admin page for mobile devices
+
+## Retell AI Talking Agent
+- [x] Install Retell AI Web SDK
+- [x] Implement Retell AI client initialization
+- [x] Create site concierge agent configuration
+- [x] Add voice call button with status indicators
+- [x] Implement voice guidance for courses
+- [x] Add business AI assistance capability
+- [ ] Test voice agent functionality (requires API keys)
+- [ ] Test on phone screen sizes (320px-480px)
+- [ ] Test on tablet screen sizes (768px-1024px)
+- [ ] Ensure all text is readable on mobile
+- [ ] Ensure all buttons are tappable on mobile
+- [ ] Fix any layout overflow issues on small screens
