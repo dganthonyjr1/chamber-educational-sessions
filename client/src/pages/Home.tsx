@@ -90,9 +90,7 @@ export default function Home() {
                   <Flame className="h-4 w-4 text-orange-500" />
                   <span className="text-sm font-semibold">{user?.currentStreak || 0}</span>
                 </div>
-                <Button variant="outline" size="sm" className="text-white border-gray-700">
-                  {user?.name || 'Profile'}
-                </Button>
+                {/* Profile button removed per user request */}
               </>
             ) : (
               <Button 
@@ -137,10 +135,10 @@ export default function Home() {
                       </Badge>
                     </div>
                     <CardTitle className="text-white group-hover:text-[#ff006e] transition-colors">
-                      {course.title}
+                      {language === 'es' && course.titleEs ? course.titleEs : course.title}
                     </CardTitle>
                     <CardDescription className="text-gray-400">
-                      {course.description}
+                      {language === 'es' && course.descriptionEs ? course.descriptionEs : course.description}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -165,8 +163,8 @@ export default function Home() {
                     {org.logoUrl && (
                       <img src={org.logoUrl} alt={org.name} className="h-16 mx-auto mb-4" />
                     )}
-                    <h4 className="text-lg font-bold mb-2">{org.name}</h4>
-                    <p className="text-sm text-gray-400 mb-4">{org.description}</p>
+                    <h4 className="text-lg font-bold mb-2">{language === 'es' && org.nameEs ? org.nameEs : org.name}</h4>
+                    <p className="text-sm text-gray-400 mb-4">{language === 'es' && org.descriptionEs ? org.descriptionEs : org.description}</p>
                     <div className="flex gap-2 justify-center">
                       {org.website && (
                         <Button

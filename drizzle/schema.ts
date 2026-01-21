@@ -36,7 +36,9 @@ export type InsertUser = typeof users.$inferInsert;
 export const courses = mysqlTable("courses", {
   id: int("id").autoincrement().primaryKey(),
   title: varchar("title", { length: 255 }).notNull(),
+  titleEs: varchar("titleEs", { length: 255 }), // Spanish title
   description: text("description"),
+  descriptionEs: text("descriptionEs"), // Spanish description
   order: int("order").notNull(), // 1, 2, 3, 4 for the 4 courses
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
@@ -128,11 +130,13 @@ export type InsertChatMessage = typeof chatMessages.$inferInsert;
 export const organizations = mysqlTable("organizations", {
   id: int("id").autoincrement().primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
-  slug: varchar("slug", { length: 100 }).notNull().unique(), // For custom URLs like /join/chamber-name
-  logoUrl: text("logoUrl"),
-  website: varchar("website", { length: 512 }),
+  nameEs: varchar("nameEs", { length: 255 }), // Spanish name
+  slug: varchar("slug", { length: 255 }).notNull().unique(), // URL-friendly identifier
   description: text("description"),
-  signupUrl: varchar("signupUrl", { length: 512 }), // Backlink to organization signup page
+  descriptionEs: text("descriptionEs"), // Spanish description
+  logoUrl: text("logoUrl"), // S3 URL for organization logo
+  website: text("website"),
+  signupUrl: text("signupUrl"), // URL to join/signup page
   primaryColor: varchar("primaryColor", { length: 7 }), // Hex color for branding
   memberCount: int("memberCount").default(0).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),

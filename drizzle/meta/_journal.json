@@ -50,6 +50,20 @@
       "when": 1769012883559,
       "tag": "0006_curved_marvel_apes",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1769013797947,
+      "tag": "0007_easy_namora",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1769014274373,
+      "tag": "0008_lowly_sentinel",
+      "breakpoints": true
     }
   ]
 }
