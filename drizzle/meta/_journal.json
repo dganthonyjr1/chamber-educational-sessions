@@ -64,6 +64,13 @@
       "when": 1769014274373,
       "tag": "0008_lowly_sentinel",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1769035382312,
+      "tag": "0009_sharp_daredevil",
+      "breakpoints": true
     }
   ]
 }

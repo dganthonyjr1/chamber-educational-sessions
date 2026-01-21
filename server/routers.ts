@@ -46,6 +46,58 @@ export const appRouter = router({
       .mutation(async ({ input }) => {
         return await db.createCourse(input);
       }),
+
+    createLesson: protectedProcedure
+      .input(z.object({
+        courseId: z.number(),
+        title: z.string(),
+        titleEs: z.string(),
+        description: z.string(),
+        descriptionEs: z.string(),
+        videoData: z.string(), // base64
+        videoType: z.string(),
+        thumbnailData: z.string().nullable(),
+        thumbnailType: z.string().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        // Create lesson first
+        const lessons = await db.getLessonsByCourseId(input.courseId);
+        const order = lessons.length + 1;
+        
+        const lesson = await db.createLesson({
+          courseId: input.courseId,
+          title: input.title,
+          titleEs: input.titleEs,
+          description: input.description,
+          descriptionEs: input.descriptionEs,
+          order,
+        });
+
+        // Upload video to S3
+        const videoBuffer = Buffer.from(input.videoData.split(',')[1], 'base64');
+        const videoKey = `lessons/${lesson.id}/video-${nanoid()}.${input.videoType.split('/')[1]}`;
+        const { url: videoUrl } = await storagePut(videoKey, videoBuffer, input.videoType);
+
+        // Upload thumbnail if provided
+        let thumbnailUrl = null;
+        let thumbnailKey = null;
+        if (input.thumbnailData && input.thumbnailType) {
+          const thumbnailBuffer = Buffer.from(input.thumbnailData.split(',')[1], 'base64');
+          thumbnailKey = `lessons/${lesson.id}/thumbnail-${nanoid()}.${input.thumbnailType.split('/')[1]}`;
+          const result = await storagePut(thumbnailKey, thumbnailBuffer, input.thumbnailType);
+          thumbnailUrl = result.url;
+        }
+
+        // Update lesson with URLs
+        await db.updateLesson(lesson.id, {
+          videoUrl,
+          videoKey,
+          thumbnailUrl,
+          thumbnailKey,
+        });
+
+        return { ...lesson, videoUrl, thumbnailUrl };
+      }),
   }),
 
   lessons: router({

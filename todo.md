@@ -91,3 +91,16 @@
 ## Button Improvements
 - [x] Replace generic floating icons with clear labeled buttons
 - [x] Add text labels so users know what each button does
+
+## Follow-Up Implementation
+- [x] Create admin interface for video uploads
+- [x] Add video upload form for each lesson
+- [x] Implement S3 video storage with 60+ minute support
+- [x] Create video player for lessons
+- [x] Generate lesson-specific pro-tips for Course 1
+- [x] Generate lesson-specific pro-tips for Course 2
+- [x] Generate lesson-specific pro-tips for Course 3
+- [x] Generate lesson-specific pro-tips for Course 4
+- [x] Display pro-tips on lesson pages (ready for when lessons exist)
+- [x] Database schema updated with Spanish fields for lessons
+- [x] API endpoints created for lesson upload with video/thumbnail

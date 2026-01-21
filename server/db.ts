@@ -132,7 +132,11 @@ export async function createLesson(lesson: InsertLesson) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   const result = await db.insert(lessons).values(lesson);
-  return result;
+  // Get the inserted lesson ID from result
+  const insertId = (result as any).insertId;
+  const created = await getLessonById(insertId);
+  if (!created) throw new Error("Failed to create lesson");
+  return created;
 }
 
 export async function updateLesson(id: number, lesson: Partial<InsertLesson>) {

@@ -52,7 +52,9 @@ export const lessons = mysqlTable("lessons", {
   id: int("id").autoincrement().primaryKey(),
   courseId: int("courseId").notNull(),
   title: varchar("title", { length: 255 }).notNull(),
+  titleEs: varchar("titleEs", { length: 255 }), // Spanish title
   description: text("description"),
+  descriptionEs: text("descriptionEs"), // Spanish description
   thumbnailUrl: text("thumbnailUrl"), // S3 URL for lesson thumbnail
   thumbnailKey: varchar("thumbnailKey", { length: 512 }), // S3 key for thumbnail
   videoUrl: text("videoUrl"), // S3 URL for video
