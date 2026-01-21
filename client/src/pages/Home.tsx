@@ -159,22 +159,11 @@ export default function Home() {
             <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
               {organizations.map((org) => (
                 <Card key={org.id} className="bg-gray-900 border-gray-800 hover:border-[#00d9ff] transition-all">
-                  <CardContent className="p-6 text-center">
-                    {org.logoUrl && (
-                      <img src={org.logoUrl} alt={org.name} className="h-16 mx-auto mb-4" />
-                    )}
-                    <h4 className="text-lg font-bold mb-2">{language === 'es' && org.nameEs ? org.nameEs : org.name}</h4>
-                    <p className="text-sm text-gray-400 mb-4">{language === 'es' && org.descriptionEs ? org.descriptionEs : org.description}</p>
-                    <div className="flex gap-2 justify-center">
-                      {org.website && (
-                        <Button
-                          onClick={() => window.open(org.website!, '_blank')}
-                          variant="outline"
-                          size="sm"
-                          className="border-gray-700 text-white"
-                        >
-                          {t('home.organizations.visit')}
-                        </Button>
+                  <CardContent className="p-6 flex flex-col h-full">
+                    {/* Top: Organization Name */}
+                    <div className="text-center mb-4">
+                      {org.logoUrl && (
+                        <img src={org.logoUrl} alt={org.name} className="h-16 mx-auto mb-3" />
                       )}
                       {org.signupUrl && (
                         <Button
@@ -183,13 +172,32 @@ export default function Home() {
                           style={{ backgroundColor: org.primaryColor || '#ff006e' }}
                           className="hover:opacity-90"
                         >
-                          {t('home.organizations.join')} {org.name}
+                          {t('home.organizations.join')} {language === 'es' && org.nameEs ? org.nameEs : org.name}
                         </Button>
                       )}
                     </div>
-                    {org.memberCount > 0 && (
-                      <p className="text-xs text-gray-500 mt-3">{org.memberCount} {t('home.organizations.members')}</p>
-                    )}
+
+                    {/* Middle: Description */}
+                    <div className="flex-grow text-center mb-4">
+                      <p className="text-sm text-gray-400">{language === 'es' && org.descriptionEs ? org.descriptionEs : org.description}</p>
+                      {org.memberCount > 0 && (
+                        <p className="text-xs text-gray-500 mt-2">{org.memberCount} {t('home.organizations.members')}</p>
+                      )}
+                    </div>
+
+                    {/* Bottom: Visit Website Button */}
+                    <div className="text-center mt-auto">
+                      {org.website && (
+                        <Button
+                          onClick={() => window.open(org.website!, '_blank')}
+                          variant="outline"
+                          size="sm"
+                          className="border-gray-700 text-white hover:bg-gray-800"
+                        >
+                          {t('home.organizations.visit')}
+                        </Button>
+                      )}
+                    </div>
                   </CardContent>
                 </Card>
               ))}

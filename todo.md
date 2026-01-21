@@ -104,3 +104,9 @@
 - [x] Display pro-tips on lesson pages (ready for when lessons exist)
 - [x] Database schema updated with Spanish fields for lessons
 - [x] API endpoints created for lesson upload with video/thumbnail
+
+## Organization Card Layout Fix
+- [x] Move organization name to top of card (centered)
+- [x] Keep description in middle
+- [x] Move "Visit Website" button to bottom (centered)
+- [x] Apply to all organization cards
