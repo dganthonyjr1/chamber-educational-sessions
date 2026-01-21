@@ -1,25 +1,312 @@
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Streamdown } from 'streamdown';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Loader2, Trophy, Flame, Star, Phone, MessageSquare, Video, Share2 } from "lucide-react";
+import { getLoginUrl } from "@/const";
+import { trpc } from "@/lib/trpc";
+import { useState } from "react";
+import { Link } from "wouter";
 
-/**
- * All content in this page are only for example, replace with your own feature implementation
- * When building pages, remember your instructions in Frontend Best Practices, Design Guide and Common Pitfalls
- */
 export default function Home() {
-  // If theme is switchable in App.tsx, we can implement theme toggling like this:
-  // const { theme, toggleTheme } = useTheme();
+  const { user, loading, isAuthenticated } = useAuth();
+  const [showShareMenu, setShowShareMenu] = useState(false);
+  
+  const { data: courses, isLoading: coursesLoading } = trpc.courses.list.useQuery();
+  const { data: leaderboard, isLoading: leaderboardLoading } = trpc.leaderboard.get.useQuery({ limit: 5 });
+  const { data: organizations } = trpc.organizations.list.useQuery();
+
+  const shareToSocial = (platform: string) => {
+    const shareText = `I'm learning AI for business at SIA AI Academy! 🚀 Join me: ${window.location.href}`;
+    const shareUrl = encodeURIComponent(window.location.href);
+    const shareTextEncoded = encodeURIComponent(shareText);
+
+    const urls = {
+      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}&quote=${shareTextEncoded}`,
+      twitter: `https://twitter.com/intent/tweet?text=${shareTextEncoded}`,
+      tiktok: `https://www.tiktok.com/upload?caption=${shareTextEncoded}`,
+      instagram: `https://www.instagram.com/`, // Instagram doesn't support direct sharing URLs
+    };
+
+    if (platform === 'instagram') {
+      alert('To share on Instagram, take a screenshot and post it to your story!');
+      return;
+    }
+
+    window.open(urls[platform as keyof typeof urls], '_blank', 'width=600,height=400');
+    setShowShareMenu(false);
+  };
+
+  const openChatGPT = () => {
+    window.open('https://chat.openai.com/', '_blank');
+  };
+
+  const openZoom = () => {
+    window.open('https://zoom.us/start/videomeeting', '_blank');
+  };
+
+  const startRetellCall = () => {
+    // TODO: Implement Retell AI call
+    alert('Retell AI voice call will be integrated here. Please add your RETELL_API_KEY and RETELL_AGENT_ID to environment variables.');
+  };
+
+  if (loading || coursesLoading) {
+    return (
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+        <Loader2 className="animate-spin h-8 w-8 text-[#ff006e]" />
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <main>
-        {/* Example: lucide-react for icons */}
-        <Loader2 className="animate-spin" />
-        Example Page
-        {/* Example: Streamdown for markdown rendering */}
-        <Streamdown>Any **markdown** content</Streamdown>
-        <Button variant="default">Example Button</Button>
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
+      {/* Header */}
+      <header className="border-b border-gray-800 bg-black/50 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-[#ff006e] to-[#00d9ff] rounded-lg flex items-center justify-center font-bold">
+              SIA
+            </div>
+            <div>
+              <h1 className="text-xl font-bold">SIA AI Academy</h1>
+              <p className="text-xs text-gray-400">Master AI for Business</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {isAuthenticated ? (
+              <>
+                <div className="flex items-center gap-2 px-3 py-2 bg-gray-900 rounded-lg">
+                  <Trophy className="h-4 w-4 text-[#ff006e]" />
+                  <span className="text-sm font-semibold">{user?.totalScore || 0}</span>
+                </div>
+                <div className="flex items-center gap-2 px-3 py-2 bg-gray-900 rounded-lg">
+                  <Flame className="h-4 w-4 text-orange-500" />
+                  <span className="text-sm font-semibold">{user?.currentStreak || 0}</span>
+                </div>
+                <Button variant="outline" size="sm" className="text-white border-gray-700">
+                  {user?.name || 'Profile'}
+                </Button>
+              </>
+            ) : (
+              <Button 
+                onClick={() => window.location.href = getLoginUrl()}
+                className="bg-gradient-to-r from-[#ff006e] to-[#00d9ff] hover:opacity-90"
+              >
+                Sign In
+              </Button>
+            )}
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-8">
+        {/* Hero Section */}
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-[#ff006e] to-[#00d9ff] bg-clip-text text-transparent">
+            Transform Your Business with AI
+          </h2>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            Join 45+ Chamber members learning to leverage AI for growth, efficiency, and innovation
+          </p>
+        </div>
+
+        {/* Courses Grid */}
+        <section className="mb-12">
+          <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
+            <Star className="h-6 w-6 text-[#ff006e]" />
+            Learning Paths
+          </h3>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {courses?.map((course) => (
+              <Link key={course.id} href={`/course/${course.id}`}>
+                <Card className="bg-gray-900 border-gray-800 hover:border-[#ff006e] transition-all cursor-pointer group">
+                  <CardHeader>
+                    <div className="flex items-center justify-between mb-2">
+                      <Badge variant="outline" className="text-[#00d9ff] border-[#00d9ff]">
+                        Course {course.order}
+                      </Badge>
+                    </div>
+                    <CardTitle className="text-white group-hover:text-[#ff006e] transition-colors">
+                      {course.title}
+                    </CardTitle>
+                    <CardDescription className="text-gray-400">
+                      {course.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Button className="w-full bg-gradient-to-r from-[#ff006e] to-[#00d9ff] hover:opacity-90">
+                      Start Learning
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* Leaderboard */}
+        <section className="mb-12">
+          <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
+            <Trophy className="h-6 w-6 text-[#ff006e]" />
+            Top Learners
+          </h3>
+
+          <Card className="bg-gray-900 border-gray-800">
+            <CardContent className="p-6">
+              {leaderboardLoading ? (
+                <div className="flex justify-center py-8">
+                  <Loader2 className="animate-spin h-6 w-6 text-[#ff006e]" />
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {leaderboard?.map((user, index) => (
+                    <div 
+                      key={user.id}
+                      className="flex items-center justify-between p-4 bg-gray-800 rounded-lg hover:bg-gray-750 transition-colors"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
+                          index === 0 ? 'bg-yellow-500 text-black' :
+                          index === 1 ? 'bg-gray-400 text-black' :
+                          index === 2 ? 'bg-orange-600 text-white' :
+                          'bg-gray-700 text-white'
+                        }`}>
+                          {index + 1}
+                        </div>
+                        <div>
+                          <p className="font-semibold">{user.name || 'Anonymous'}</p>
+                          <p className="text-sm text-gray-400">Level {user.level}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-1">
+                          <Flame className="h-4 w-4 text-orange-500" />
+                          <span className="text-sm">{user.bestStreak}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Trophy className="h-4 w-4 text-[#ff006e]" />
+                          <span className="font-bold">{user.totalScore}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* Partner Organizations */}
+        {organizations && organizations.length > 0 && (
+          <section className="mb-12">
+            <h3 className="text-2xl font-bold mb-6 text-center">Our Partner Organizations</h3>
+            <div className="grid md:grid-cols-3 gap-6">
+              {organizations.map((org) => (
+                <Card key={org.id} className="bg-gray-900 border-gray-800 hover:border-[#00d9ff] transition-all">
+                  <CardContent className="p-6 text-center">
+                    {org.logoUrl && (
+                      <img src={org.logoUrl} alt={org.name} className="h-16 mx-auto mb-4" />
+                    )}
+                    <h4 className="text-lg font-bold mb-2">{org.name}</h4>
+                    <p className="text-sm text-gray-400 mb-4">{org.description}</p>
+                    <div className="flex gap-2 justify-center">
+                      {org.website && (
+                        <Button
+                          onClick={() => window.open(org.website!, '_blank')}
+                          variant="outline"
+                          size="sm"
+                          className="border-gray-700 text-white"
+                        >
+                          Visit Website
+                        </Button>
+                      )}
+                      {org.signupUrl && (
+                        <Button
+                          onClick={() => window.open(org.signupUrl!, '_blank')}
+                          size="sm"
+                          style={{ backgroundColor: org.primaryColor || '#ff006e' }}
+                          className="hover:opacity-90"
+                        >
+                          Join {org.name}
+                        </Button>
+                      )}
+                    </div>
+                    {org.memberCount > 0 && (
+                      <p className="text-xs text-gray-500 mt-3">{org.memberCount} members learning</p>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Social Sharing */}
+        <section className="text-center">
+          <Button
+            onClick={() => setShowShareMenu(!showShareMenu)}
+            variant="outline"
+            className="border-[#ff006e] text-[#ff006e] hover:bg-[#ff006e] hover:text-white"
+          >
+            <Share2 className="h-4 w-4 mr-2" />
+            Share Your Progress
+          </Button>
+
+          {showShareMenu && (
+            <div className="mt-4 flex justify-center gap-3 flex-wrap">
+              <Button onClick={() => shareToSocial('linkedin')} className="bg-[#0077b5] hover:bg-[#006399]">
+                LinkedIn
+              </Button>
+              <Button onClick={() => shareToSocial('facebook')} className="bg-[#1877f2] hover:bg-[#166fe5]">
+                Facebook
+              </Button>
+              <Button onClick={() => shareToSocial('twitter')} className="bg-[#1da1f2] hover:bg-[#1a91da]">
+                Twitter
+              </Button>
+              <Button onClick={() => shareToSocial('tiktok')} className="bg-black hover:bg-gray-900">
+                TikTok
+              </Button>
+              <Button onClick={() => shareToSocial('instagram')} className="bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] hover:opacity-90">
+                Instagram
+              </Button>
+            </div>
+          )}
+        </section>
       </main>
+
+      {/* Floating Action Buttons */}
+      <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
+        <Button
+          onClick={startRetellCall}
+          size="lg"
+          className="rounded-full w-14 h-14 bg-[#ff006e] hover:bg-[#e6005f] shadow-lg"
+          title="Talk to AI Coach"
+        >
+          <Phone className="h-6 w-6" />
+        </Button>
+        
+        <Button
+          onClick={openChatGPT}
+          size="lg"
+          className="rounded-full w-14 h-14 bg-[#00d9ff] hover:bg-[#00c2e6] shadow-lg"
+          title="ChatGPT Assistant"
+        >
+          <MessageSquare className="h-6 w-6" />
+        </Button>
+        
+        <Button
+          onClick={openZoom}
+          size="lg"
+          className="rounded-full w-14 h-14 bg-[#2d8cff] hover:bg-[#2579e6] shadow-lg"
+          title="Schedule Zoom Meeting"
+        >
+          <Video className="h-6 w-6" />
+        </Button>
+      </div>
     </div>
   );
 }

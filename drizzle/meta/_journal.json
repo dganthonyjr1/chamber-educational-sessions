@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1769011642544,
+      "tag": "0000_mean_namorita",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1769011726467,
+      "tag": "0001_wandering_scream",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1769012326282,
+      "tag": "0002_smooth_shard",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1769012362106,
+      "tag": "0003_next_menace",
+      "breakpoints": true
+    }
+  ]
+}
