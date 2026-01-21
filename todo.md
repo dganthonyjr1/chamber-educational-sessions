@@ -16,12 +16,35 @@
 - [ ] Create course-specific quiz sets
 - [ ] Link quizzes to courses with completion tracking
 
-## Phase 2: Leaderboard & Social Sharing
-- [ ] Build leaderboard with user rankings
-- [ ] Add social sharing for all platforms (LinkedIn, Facebook, Twitter, TikTok, Instagram)
-- [ ] Brand share messages for each platform
+## Phase 6: Pro-Tips & Business Solutions
+- [x] Create pro-tips database table
+- [x] Link pro-tips to specific lessons (not random)
+- [x] Each lesson has relevant problem/solution tips
+- [x] Pro-tips match lesson content for context
+- [x] Showcase SIA expertise subtly without advertising
+
+## Phase 5: Advanced Learning & Bonus Content
+- [ ] Add 2 placeholder courses for advanced learning
+- [ ] Create bonus PDF download system
+- [ ] Download and host PDF from Google Drive
+- [ ] Unlock bonus PDF after completing all 4 courses
+- [ ] Add completion certificate/badge
+
+## Phase 2: Social Sharing
+- [x] Add social sharing for all platforms (LinkedIn, Facebook, Twitter, TikTok, Instagram)
+- [x] Brand share messages for each platform
 - [ ] Create achievement badges system
-- [ ] Display top performers
+
+## Phase 7: Voice Agent & Multi-Language
+- [ ] Integrate Gemini LLM for voice agent intelligence
+- [ ] Connect Retell AI for voice interface
+- [ ] Voice agent walks users through lessons
+- [ ] Voice agent answers business questions
+- [x] Add bilingual support (English & Spanish)
+- [x] Language toggle in header
+- [x] Translate all site content to Spanish
+- [x] Voice agent speaks English and Spanish
+- [x] Save user language preference
 
 ## Phase 3: Integrated Tools
 - [x] Add ChatGPT button for AI assistance

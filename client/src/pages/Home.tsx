@@ -1,4 +1,6 @@
 import { useAuth } from "@/_core/hooks/useAuth";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageToggle } from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,14 +12,15 @@ import { Link } from "wouter";
 
 export default function Home() {
   const { user, loading, isAuthenticated } = useAuth();
+  const { t, language } = useLanguage();
   const [showShareMenu, setShowShareMenu] = useState(false);
   
   const { data: courses, isLoading: coursesLoading } = trpc.courses.list.useQuery();
-  const { data: leaderboard, isLoading: leaderboardLoading } = trpc.leaderboard.get.useQuery({ limit: 5 });
+
   const { data: organizations } = trpc.organizations.list.useQuery();
 
   const shareToSocial = (platform: string) => {
-    const shareText = `I'm learning AI for business at SIA AI Academy! 🚀 Join me: ${window.location.href}`;
+    const shareText = t('home.share.text') + ` ${window.location.href}`;
     const shareUrl = encodeURIComponent(window.location.href);
     const shareTextEncoded = encodeURIComponent(shareText);
 
@@ -69,12 +72,14 @@ export default function Home() {
               SIA
             </div>
             <div>
-              <h1 className="text-xl font-bold">SIA AI Academy</h1>
-              <p className="text-xs text-gray-400">Master AI for Business</p>
+              <h1 className="text-xl font-bold">{t('app.title')}</h1>
+              <p className="text-xs text-gray-400">{t('app.subtitle')}</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
+            <LanguageToggle />
+            <div className="flex items-center gap-2">
             {isAuthenticated ? (
               <>
                 <div className="flex items-center gap-2 px-3 py-2 bg-gray-900 rounded-lg">
@@ -97,6 +102,7 @@ export default function Home() {
                 Sign In
               </Button>
             )}
+            </div>
           </div>
         </div>
       </header>
@@ -106,10 +112,10 @@ export default function Home() {
         {/* Hero Section */}
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-[#ff006e] to-[#00d9ff] bg-clip-text text-transparent">
-            Transform Your Business with AI
+            {t('home.hero.title')}
           </h2>
           <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-            Join 45+ Chamber members learning to leverage AI for growth, efficiency, and innovation
+            {t('home.hero.subtitle')}
           </p>
         </div>
 
@@ -117,7 +123,7 @@ export default function Home() {
         <section className="mb-12">
           <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
             <Star className="h-6 w-6 text-[#ff006e]" />
-            Learning Paths
+            {t('home.courses.title')}
           </h3>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -139,7 +145,7 @@ export default function Home() {
                   </CardHeader>
                   <CardContent>
                     <Button className="w-full bg-gradient-to-r from-[#ff006e] to-[#00d9ff] hover:opacity-90">
-                      Start Learning
+                      {t('home.courses.start')}
                     </Button>
                   </CardContent>
                 </Card>
@@ -148,62 +154,10 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Leaderboard */}
-        <section className="mb-12">
-          <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
-            <Trophy className="h-6 w-6 text-[#ff006e]" />
-            Top Learners
-          </h3>
-
-          <Card className="bg-gray-900 border-gray-800">
-            <CardContent className="p-6">
-              {leaderboardLoading ? (
-                <div className="flex justify-center py-8">
-                  <Loader2 className="animate-spin h-6 w-6 text-[#ff006e]" />
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {leaderboard?.map((user, index) => (
-                    <div 
-                      key={user.id}
-                      className="flex items-center justify-between p-4 bg-gray-800 rounded-lg hover:bg-gray-750 transition-colors"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
-                          index === 0 ? 'bg-yellow-500 text-black' :
-                          index === 1 ? 'bg-gray-400 text-black' :
-                          index === 2 ? 'bg-orange-600 text-white' :
-                          'bg-gray-700 text-white'
-                        }`}>
-                          {index + 1}
-                        </div>
-                        <div>
-                          <p className="font-semibold">{user.name || 'Anonymous'}</p>
-                          <p className="text-sm text-gray-400">Level {user.level}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-1">
-                          <Flame className="h-4 w-4 text-orange-500" />
-                          <span className="text-sm">{user.bestStreak}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Trophy className="h-4 w-4 text-[#ff006e]" />
-                          <span className="font-bold">{user.totalScore}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </section>
-
         {/* Partner Organizations */}
         {organizations && organizations.length > 0 && (
           <section className="mb-12">
-            <h3 className="text-2xl font-bold mb-6 text-center">Our Partner Organizations</h3>
+            <h3 className="text-2xl font-bold mb-6 text-center">{t('home.organizations.title')}</h3>
             <div className="grid md:grid-cols-3 gap-6">
               {organizations.map((org) => (
                 <Card key={org.id} className="bg-gray-900 border-gray-800 hover:border-[#00d9ff] transition-all">
@@ -221,7 +175,7 @@ export default function Home() {
                           size="sm"
                           className="border-gray-700 text-white"
                         >
-                          Visit Website
+                          {t('home.organizations.visit')}
                         </Button>
                       )}
                       {org.signupUrl && (
@@ -231,12 +185,12 @@ export default function Home() {
                           style={{ backgroundColor: org.primaryColor || '#ff006e' }}
                           className="hover:opacity-90"
                         >
-                          Join {org.name}
+                          {t('home.organizations.join')} {org.name}
                         </Button>
                       )}
                     </div>
                     {org.memberCount > 0 && (
-                      <p className="text-xs text-gray-500 mt-3">{org.memberCount} members learning</p>
+                      <p className="text-xs text-gray-500 mt-3">{org.memberCount} {t('home.organizations.members')}</p>
                     )}
                   </CardContent>
                 </Card>
@@ -253,25 +207,25 @@ export default function Home() {
             className="border-[#ff006e] text-[#ff006e] hover:bg-[#ff006e] hover:text-white"
           >
             <Share2 className="h-4 w-4 mr-2" />
-            Share Your Progress
+            {t('home.share.title')}
           </Button>
 
           {showShareMenu && (
             <div className="mt-4 flex justify-center gap-3 flex-wrap">
               <Button onClick={() => shareToSocial('linkedin')} className="bg-[#0077b5] hover:bg-[#006399]">
-                LinkedIn
+                {t('share.linkedin')}
               </Button>
               <Button onClick={() => shareToSocial('facebook')} className="bg-[#1877f2] hover:bg-[#166fe5]">
-                Facebook
+                {t('share.facebook')}
               </Button>
               <Button onClick={() => shareToSocial('twitter')} className="bg-[#1da1f2] hover:bg-[#1a91da]">
-                Twitter
+                {t('share.twitter')}
               </Button>
               <Button onClick={() => shareToSocial('tiktok')} className="bg-black hover:bg-gray-900">
-                TikTok
+                {t('share.tiktok')}
               </Button>
               <Button onClick={() => shareToSocial('instagram')} className="bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] hover:opacity-90">
-                Instagram
+                {t('share.instagram')}
               </Button>
             </div>
           )}
@@ -284,7 +238,7 @@ export default function Home() {
           onClick={startRetellCall}
           size="lg"
           className="rounded-full w-14 h-14 bg-[#ff006e] hover:bg-[#e6005f] shadow-lg"
-          title="Talk to AI Coach"
+          title={t('voice.callButton')}
         >
           <Phone className="h-6 w-6" />
         </Button>
@@ -293,7 +247,7 @@ export default function Home() {
           onClick={openChatGPT}
           size="lg"
           className="rounded-full w-14 h-14 bg-[#00d9ff] hover:bg-[#00c2e6] shadow-lg"
-          title="ChatGPT Assistant"
+          title={t('tools.chatgpt')}
         >
           <MessageSquare className="h-6 w-6" />
         </Button>
@@ -302,7 +256,7 @@ export default function Home() {
           onClick={openZoom}
           size="lg"
           className="rounded-full w-14 h-14 bg-[#2d8cff] hover:bg-[#2579e6] shadow-lg"
-          title="Schedule Zoom Meeting"
+          title={t('tools.zoom')}
         >
           <Video className="h-6 w-6" />
         </Button>

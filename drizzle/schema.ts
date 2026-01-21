@@ -154,3 +154,30 @@ export const magicLinks = mysqlTable("magic_links", {
 
 export type MagicLink = typeof magicLinks.$inferSelect;
 export type InsertMagicLink = typeof magicLinks.$inferInsert;
+
+// Bonus content table
+export const bonusContent = mysqlTable("bonus_content", {
+  id: int("id").autoincrement().primaryKey(),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: text("description"),
+  fileUrl: text("fileUrl").notNull(),
+  fileName: varchar("fileName", { length: 255 }).notNull(),
+  requiredCoursesCompleted: int("requiredCoursesCompleted").default(4).notNull(), // Number of courses to complete
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type BonusContent = typeof bonusContent.$inferSelect;
+export type InsertBonusContent = typeof bonusContent.$inferInsert;
+
+// Pro-tips table - Business problems and AI solutions (lesson-specific)
+export const proTips = mysqlTable("pro_tips", {
+  id: int("id").autoincrement().primaryKey(),
+  lessonId: int("lessonId").notNull(), // Links tip to specific lesson
+  problem: text("problem").notNull(), // Business problem relevant to this lesson
+  solution: text("solution").notNull(), // AI solution taught in this lesson
+  order: int("order").default(1).notNull(), // Display order within lesson
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ProTip = typeof proTips.$inferSelect;
+export type InsertProTip = typeof proTips.$inferInsert;

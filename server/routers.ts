@@ -5,6 +5,9 @@ import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import * as db from "./db";
 import * as orgDb from "./db-organizations";
+import { proTips, bonusContent } from "../drizzle/schema";
+import { eq } from "drizzle-orm";
+import { getDb } from "./db";
 import { storagePut } from "./storage";
 import { invokeLLM } from "./_core/llm";
 import { nanoid } from "nanoid";
@@ -274,6 +277,43 @@ export const appRouter = router({
         }
         return { email: link.email, organizationId: link.organizationId };
       }),
+  }),
+
+  proTips: router({
+    getByLesson: publicProcedure
+      .input(z.object({ lessonId: z.number() }))
+      .query(async ({ input }) => {
+        const db = await getDb();
+        if (!db) return [];
+        
+        // Get pro-tips for this specific lesson
+        return db.select().from(proTips)
+          .where(eq(proTips.lessonId, input.lessonId));
+      }),
+  }),
+
+  bonus: router({
+    getAvailable: protectedProcedure.query(async ({ ctx }) => {
+      const dbInstance = await getDb();
+      if (!dbInstance) return [];
+      
+      // Get all courses
+      const allCourses = await db.getAllCourses();
+      
+      // Count completed courses
+      let completedCount = 0;
+      for (const course of allCourses) {
+        const progress = await db.getUserProgressByCourse(ctx.user.id, course.id);
+        const courseCompleted = progress.every(p => p.progress.completed);
+        if (courseCompleted && progress.length > 0) {
+          completedCount++;
+        }
+      }
+      
+      // Get bonus content that user has unlocked
+      const bonuses = await dbInstance.select().from(bonusContent);
+      return bonuses.filter(b => completedCount >= b.requiredCoursesCompleted);
+    }),
   }),
 });
 

@@ -1,0 +1,9 @@
+{
+  "query": "UPDATE bonus_content SET fileUrl = 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663195226131/NGngLTsYdsLuhizy.pdf' WHERE fileName = 'SIA_AI_Bonus_Guide.pdf';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2xJWUbCgvHcrVL3.a7dc9748d951 --database eDJt5NrsD4GwvVzKcAHDGY --execute UPDATE bonus_content SET fileUrl = 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663195226131/NGngLTsYdsLuhizy.pdf' WHERE fileName = 'SIA_AI_Bonus_Guide.pdf';",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 292
+}
