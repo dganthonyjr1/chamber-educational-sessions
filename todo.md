@@ -175,3 +175,13 @@
 - [x] Research and add SHCCNJ social media links (LinkedIn, Twitter)
 - [x] Verify all 21 county Chambers are the major/primary ones for each county
 - [x] Update any county Chambers that aren't the largest/most influential
+
+## Design Updates
+- [x] Redesign theme from dark to light beachy Wildwood NJ aesthetic
+- [x] Update color palette: sandy beige backgrounds, ocean blues, sunset accents
+- [x] Ensure readability and accessibility with new light theme
+- [x] Test across all pages and components
+
+## Bug Fixes
+- [ ] Fix tRPC API error: "Unexpected token '<', "<!doctype "... is not valid JSON"
+- [ ] Investigate why API endpoint is returning HTML instead of JSON

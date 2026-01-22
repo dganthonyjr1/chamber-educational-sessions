@@ -62,19 +62,19 @@ export default function Home() {
 
   if (loading || coursesLoading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <Loader2 className="animate-spin h-8 w-8 text-[#ff006e]" />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="animate-spin h-8 w-8 text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Header - Mobile Optimized */}
-      <header className="border-b border-gray-800 bg-black/50 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center justify-between">
           <div className="flex items-center gap-2 sm:gap-3">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-[#ff006e] to-[#00d9ff] rounded-lg flex items-center justify-center font-bold text-xs sm:text-base">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center font-bold text-xs sm:text-base text-primary-foreground">
               SIA
             </div>
             <div>
@@ -88,13 +88,13 @@ export default function Home() {
             <div className="flex items-center gap-2">
             {isAuthenticated ? (
               <>
-                <div className="flex items-center gap-2 px-3 py-2 bg-gray-900 rounded-lg">
-                  <Trophy className="h-4 w-4 text-[#ff006e]" />
-                  <span className="text-sm font-semibold">{user?.totalScore || 0}</span>
+                <div className="flex items-center gap-2 px-3 py-2 bg-secondary rounded-lg">
+                  <Trophy className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-semibold text-secondary-foreground">{user?.totalScore || 0}</span>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-2 bg-gray-900 rounded-lg">
-                  <Flame className="h-4 w-4 text-orange-500" />
-                  <span className="text-sm font-semibold">{user?.currentStreak || 0}</span>
+                <div className="flex items-center gap-2 px-3 py-2 bg-secondary rounded-lg">
+                  <Flame className="h-4 w-4 text-chart-4" />
+                  <span className="text-sm font-semibold text-secondary-foreground">{user?.currentStreak || 0}</span>
                 </div>
                 {/* Profile button removed per user request */}
               </>
@@ -115,10 +115,10 @@ export default function Home() {
       <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
         {/* Hero Section - Mobile Optimized */}
         <div className="text-center mb-8 sm:mb-12">
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-[#ff006e] to-[#00d9ff] bg-clip-text text-transparent px-2">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-primary via-accent to-chart-4 bg-clip-text text-transparent px-2">
             {t('home.hero.title')}
           </h2>
-          <p className="text-base sm:text-xl text-gray-400 max-w-2xl mx-auto px-4">
+          <p className="text-base sm:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
             {t('home.hero.subtitle')}
           </p>
         </div>
@@ -126,29 +126,29 @@ export default function Home() {
         {/* Courses Grid - Mobile Optimized */}
         <section className="mb-8 sm:mb-12">
           <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 flex items-center gap-2">
-            <Star className="h-6 w-6 text-[#ff006e]" />
+            <Star className="h-6 w-6 text-primary" />
             {t('home.courses.title')}
           </h3>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto">
             {courses?.map((course) => (
               <Link key={course.id} href={`/course/${course.id}`}>
-                <Card className="bg-gray-900 border-gray-800 hover:border-[#ff006e] transition-all cursor-pointer group">
+                <Card className="bg-card border-border hover:border-primary transition-all cursor-pointer group hover:shadow-lg">
                   <CardHeader>
                     <div className="flex items-center justify-between mb-2">
-                      <Badge variant="outline" className="text-[#00d9ff] border-[#00d9ff]">
+                      <Badge variant="outline" className="text-primary border-primary">
                         Course {course.order}
                       </Badge>
                     </div>
-                    <CardTitle className="text-white group-hover:text-[#ff006e] transition-colors">
+                    <CardTitle className="text-card-foreground group-hover:text-primary transition-colors">
                       {language === 'es' && course.titleEs ? course.titleEs : course.title}
                     </CardTitle>
-                    <CardDescription className="text-gray-400">
+                    <CardDescription className="text-muted-foreground">
                       {language === 'es' && course.descriptionEs ? course.descriptionEs : course.description}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Button className="w-full bg-gradient-to-r from-[#ff006e] to-[#00d9ff] hover:opacity-90">
+                    <Button className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground">
                       {t('home.courses.start')}
                     </Button>
                   </CardContent>
@@ -162,7 +162,7 @@ export default function Home() {
         {locationData?.chamber && (
           <section className="mb-12">
             <div className="text-center mb-6">
-              <Badge className="bg-gradient-to-r from-[#ff006e] to-[#00d9ff] text-white mb-2">
+              <Badge className="bg-gradient-to-r from-primary to-accent text-primary-foreground mb-2">
                 📍 {language === 'es' ? 'Tu Cámara Local' : 'Your Local Chamber'}
               </Badge>
               <h3 className="text-2xl font-bold">
@@ -176,7 +176,7 @@ export default function Home() {
             </div>
             
             <div className="max-w-2xl mx-auto">
-              <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-2 border-[#ff006e] shadow-2xl">
+              <Card className="bg-gradient-to-br from-card to-secondary border-2 border-primary shadow-2xl">
                 <CardContent className="p-8">
                   <div className="text-center mb-6">
                     {locationData.chamber.logoUrl && (
@@ -185,11 +185,11 @@ export default function Home() {
                     <h4 className="text-2xl font-bold mb-2">
                       {language === 'es' && locationData.chamber.nameEs ? locationData.chamber.nameEs : locationData.chamber.name}
                     </h4>
-                    <p className="text-gray-300 mb-4">
+                    <p className="text-card-foreground mb-4">
                       {language === 'es' && locationData.chamber.descriptionEs ? locationData.chamber.descriptionEs : locationData.chamber.description}
                     </p>
                     {locationData.chamber?.distance && (
-                      <p className="text-sm text-[#00d9ff] mb-4">
+                      <p className="text-sm text-accent mb-4">
                         📍 {Math.round(locationData.chamber.distance)} {language === 'es' ? 'millas de distancia' : 'miles away'}
                       </p>
                     )}
@@ -200,8 +200,7 @@ export default function Home() {
                       <Button
                         onClick={() => window.open(locationData.chamber?.signupUrl!, '_blank')}
                         size="lg"
-                        style={{ backgroundColor: locationData.chamber?.primaryColor || '#ff006e' }}
-                        className="hover:opacity-90 text-white font-bold"
+                        className="bg-chart-4 hover:opacity-90 text-primary-foreground font-bold"
                       >
                         {t('home.organizations.join')} {language === 'es' ? 'Ahora' : 'Now'} →
                       </Button>
@@ -211,7 +210,7 @@ export default function Home() {
                         onClick={() => window.open(locationData.chamber?.website!, '_blank')}
                         variant="outline"
                         size="lg"
-                        className="border-gray-600 text-white hover:bg-gray-700"
+                        className="border-border text-card-foreground hover:bg-secondary"
                       >
                         {t('home.organizations.visit')}
                       </Button>
@@ -295,7 +294,7 @@ export default function Home() {
                 .filter(org => org.id !== locationData?.chamber?.id)
                 .slice(0, 6)
                 .map((org) => (
-                <Card key={org.id} className="bg-gray-900 border-gray-800 hover:border-[#00d9ff] transition-all">
+                <Card key={org.id} className="bg-card border-border hover:border-accent transition-all hover:shadow-lg">
                   <CardContent className="p-6 flex flex-col h-full">
                     {/* Top: Organization Name */}
                     <div className="text-center mb-4">
@@ -306,8 +305,7 @@ export default function Home() {
                         <Button
                           onClick={() => window.open(org.signupUrl!, '_blank')}
                           size="sm"
-                          style={{ backgroundColor: org.primaryColor || '#ff006e' }}
-                          className="hover:opacity-90"
+                          className="bg-primary text-primary-foreground hover:opacity-90"
                         >
                           {t('home.organizations.join')} {language === 'es' && org.nameEs ? org.nameEs : org.name}
                         </Button>
@@ -316,9 +314,9 @@ export default function Home() {
 
                     {/* Middle: Description */}
                     <div className="flex-grow text-center mb-4">
-                      <p className="text-sm text-gray-400">{language === 'es' && org.descriptionEs ? org.descriptionEs : org.description}</p>
+                      <p className="text-sm text-muted-foreground">{language === 'es' && org.descriptionEs ? org.descriptionEs : org.description}</p>
                       {org.memberCount > 0 && (
-                        <p className="text-xs text-gray-500 mt-2">{org.memberCount} {t('home.organizations.members')}</p>
+                        <p className="text-xs text-muted-foreground mt-2">{org.memberCount} {t('home.organizations.members')}</p>
                       )}
                     </div>
 
@@ -329,7 +327,7 @@ export default function Home() {
                           onClick={() => window.open(org.website!, '_blank')}
                           variant="outline"
                           size="sm"
-                          className="border-gray-700 text-white hover:bg-gray-800"
+                          className="border-border text-card-foreground hover:bg-secondary"
                         >
                           {t('home.organizations.visit')}
                         </Button>
