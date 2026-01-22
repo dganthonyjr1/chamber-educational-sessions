@@ -152,3 +152,20 @@
 - [x] Show user's local Chamber instead of Wildwood Chamber
 - [ ] Add fallback to default Chamber if location can't be detected
 - [ ] Test location detection with different IP addresses
+
+## Retell AI Agent Enhancement (Tomorrow)
+- [ ] Configure Retell AI agent with Chamber database knowledge
+- [ ] Add all 21 NJ Chambers info to agent knowledge base
+- [ ] Train agent on Sudden Impact Agency services and AI training courses
+- [ ] Enable agent to answer Chamber location questions
+- [ ] Test agent with Chamber-related queries
+- [ ] Document agent configuration for future updates
+
+## Faceless AI Educational Videos (Tomorrow)
+- [ ] Research faceless video creation tools/services
+- [ ] Define video content structure for each course
+- [ ] Create video scripts for Course 1 lessons
+- [ ] Generate or source faceless video content
+- [ ] Upload videos to S3 storage
+- [ ] Link videos to lessons in database
+- [ ] Test video playback on all devices
