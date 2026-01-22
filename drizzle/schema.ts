@@ -140,7 +140,15 @@ export const organizations = mysqlTable("organizations", {
   website: text("website"),
   signupUrl: text("signupUrl"), // URL to join/signup page
   primaryColor: varchar("primaryColor", { length: 7 }), // Hex color for branding
+  city: varchar("city", { length: 100 }), // City location
+  state: varchar("state", { length: 2 }), // US state code (e.g., "NJ", "CA")
   memberCount: int("memberCount").default(0).notNull(),
+  // Social media links
+  linkedinUrl: text("linkedinUrl"), // LinkedIn company page
+  facebookUrl: text("facebookUrl"), // Facebook page
+  twitterUrl: text("twitterUrl"), // X (Twitter) profile
+  instagramUrl: text("instagramUrl"), // Instagram profile
+  tiktokUrl: text("tiktokUrl"), // TikTok profile
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 

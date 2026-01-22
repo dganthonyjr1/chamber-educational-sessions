@@ -5,7 +5,7 @@ import { LanguageToggle } from "@/components/LanguageToggle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Trophy, Flame, Star, Phone, MessageSquare, Video, Share2 } from "lucide-react";
+import { Loader2, Trophy, Flame, Star, Phone, MessageSquare, Video, Share2, Linkedin, Facebook, Twitter, Instagram } from "lucide-react";
 import { getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { useState } from "react";
@@ -20,6 +20,7 @@ export default function Home() {
   const { data: courses, isLoading: coursesLoading } = trpc.courses.list.useQuery();
 
   const { data: organizations } = trpc.organizations.list.useQuery();
+  const { data: locationData } = trpc.location.detectChamber.useQuery();
 
   const shareToSocial = (platform: string) => {
     const shareText = t('home.share.text') + ` ${window.location.href}`;
@@ -157,12 +158,143 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Partner Organizations */}
+        {/* Your Local Chamber - Detected by IP */}
+        {locationData?.chamber && (
+          <section className="mb-12">
+            <div className="text-center mb-6">
+              <Badge className="bg-gradient-to-r from-[#ff006e] to-[#00d9ff] text-white mb-2">
+                📍 {language === 'es' ? 'Tu Cámara Local' : 'Your Local Chamber'}
+              </Badge>
+              <h3 className="text-2xl font-bold">
+                {language === 'es' ? '¡Únete a tu Cámara de Comercio!' : 'Join Your Chamber of Commerce!'}
+              </h3>
+              {locationData.location?.city && (
+                <p className="text-sm text-gray-400 mt-2">
+                  {language === 'es' ? 'Detectado desde' : 'Detected from'}: {locationData.location.city}, {locationData.location.state}
+                </p>
+              )}
+            </div>
+            
+            <div className="max-w-2xl mx-auto">
+              <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-2 border-[#ff006e] shadow-2xl">
+                <CardContent className="p-8">
+                  <div className="text-center mb-6">
+                    {locationData.chamber.logoUrl && (
+                      <img src={locationData.chamber.logoUrl} alt={locationData.chamber.name} className="h-20 mx-auto mb-4" />
+                    )}
+                    <h4 className="text-2xl font-bold mb-2">
+                      {language === 'es' && locationData.chamber.nameEs ? locationData.chamber.nameEs : locationData.chamber.name}
+                    </h4>
+                    <p className="text-gray-300 mb-4">
+                      {language === 'es' && locationData.chamber.descriptionEs ? locationData.chamber.descriptionEs : locationData.chamber.description}
+                    </p>
+                    {locationData.chamber?.distance && (
+                      <p className="text-sm text-[#00d9ff] mb-4">
+                        📍 {Math.round(locationData.chamber.distance)} {language === 'es' ? 'millas de distancia' : 'miles away'}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                    {locationData.chamber?.signupUrl && (
+                      <Button
+                        onClick={() => window.open(locationData.chamber?.signupUrl!, '_blank')}
+                        size="lg"
+                        style={{ backgroundColor: locationData.chamber?.primaryColor || '#ff006e' }}
+                        className="hover:opacity-90 text-white font-bold"
+                      >
+                        {t('home.organizations.join')} {language === 'es' ? 'Ahora' : 'Now'} →
+                      </Button>
+                    )}
+                    {locationData.chamber?.website && (
+                      <Button
+                        onClick={() => window.open(locationData.chamber?.website!, '_blank')}
+                        variant="outline"
+                        size="lg"
+                        className="border-gray-600 text-white hover:bg-gray-700"
+                      >
+                        {t('home.organizations.visit')}
+                      </Button>
+                    )}
+                  </div>
+
+                  {/* Social Media Links */}
+                  {(locationData.chamber?.linkedinUrl || locationData.chamber?.facebookUrl || locationData.chamber?.twitterUrl || locationData.chamber?.instagramUrl || locationData.chamber?.tiktokUrl) && (
+                    <div className="mt-6 pt-6 border-t border-gray-700">
+                      <p className="text-sm text-gray-400 text-center mb-3">
+                        {language === 'es' ? 'Conecta en Redes Sociales' : 'Connect on Social Media'}
+                      </p>
+                      <div className="flex justify-center gap-3 flex-wrap">
+                        {locationData.chamber?.linkedinUrl && (
+                          <Button
+                            onClick={() => window.open(locationData.chamber?.linkedinUrl!, '_blank')}
+                            size="sm"
+                            className="bg-[#0077b5] hover:bg-[#006399] text-white"
+                            title="LinkedIn"
+                          >
+                            <Linkedin className="h-4 w-4" />
+                          </Button>
+                        )}
+                        {locationData.chamber?.facebookUrl && (
+                          <Button
+                            onClick={() => window.open(locationData.chamber?.facebookUrl!, '_blank')}
+                            size="sm"
+                            className="bg-[#1877f2] hover:bg-[#166fe5] text-white"
+                            title="Facebook"
+                          >
+                            <Facebook className="h-4 w-4" />
+                          </Button>
+                        )}
+                        {locationData.chamber?.twitterUrl && (
+                          <Button
+                            onClick={() => window.open(locationData.chamber?.twitterUrl!, '_blank')}
+                            size="sm"
+                            className="bg-black hover:bg-gray-900 text-white"
+                            title="X (Twitter)"
+                          >
+                            <Twitter className="h-4 w-4" />
+                          </Button>
+                        )}
+                        {locationData.chamber?.instagramUrl && (
+                          <Button
+                            onClick={() => window.open(locationData.chamber?.instagramUrl!, '_blank')}
+                            size="sm"
+                            className="bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045] hover:opacity-90 text-white"
+                            title="Instagram"
+                          >
+                            <Instagram className="h-4 w-4" />
+                          </Button>
+                        )}
+                        {locationData.chamber?.tiktokUrl && (
+                          <Button
+                            onClick={() => window.open(locationData.chamber?.tiktokUrl!, '_blank')}
+                            size="sm"
+                            className="bg-black hover:bg-gray-900 text-white border border-[#00f2ea]"
+                            title="TikTok"
+                          >
+                            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                            </svg>
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </section>
+        )}
+
+        {/* Other Partner Chambers */}
         {organizations && organizations.length > 0 && (
           <section className="mb-12">
-            <h3 className="text-2xl font-bold mb-6 text-center">{t('home.organizations.title')}</h3>
+            <h3 className="text-2xl font-bold mb-6 text-center">{language === 'es' ? 'Otras Cámaras Asociadas' : 'Other Partner Chambers'}</h3>
             <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-              {organizations.map((org) => (
+              {organizations
+                .filter(org => org.id !== locationData?.chamber?.id)
+                .slice(0, 6)
+                .map((org) => (
                 <Card key={org.id} className="bg-gray-900 border-gray-800 hover:border-[#00d9ff] transition-all">
                   <CardContent className="p-6 flex flex-col h-full">
                     {/* Top: Organization Name */}

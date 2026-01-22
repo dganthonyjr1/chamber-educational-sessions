@@ -71,6 +71,20 @@
       "when": 1769035382312,
       "tag": "0009_sharp_daredevil",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1769044625937,
+      "tag": "0010_parallel_the_renegades",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1769045285811,
+      "tag": "0011_lean_cassandra_nova",
+      "breakpoints": true
     }
   ]
 }

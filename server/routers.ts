@@ -385,6 +385,45 @@ export const appRouter = router({
       }),
   }),
 
+  location: router({
+    detectChamber: publicProcedure.query(async ({ ctx }) => {
+      const { getLocationFromIP, findClosestChamber } = await import("./geolocation");
+      
+      // Get user IP from request
+      const ip = ctx.req.headers["x-forwarded-for"] as string || ctx.req.socket.remoteAddress || "127.0.0.1";
+      const userIP = Array.isArray(ip) ? ip[0] : ip.split(",")[0];
+      
+      console.log(`[Location Detection] User IP: ${userIP}`);
+      
+      // Get user location from IP
+      const location = await getLocationFromIP(userIP);
+      console.log(`[Location Detection] Detected location:`, location);
+      
+      // Get all Chambers
+      const chambers = await orgDb.getAllOrganizations();
+      
+      // Find closest Chamber
+      if (location.latitude && location.longitude && chambers.length > 0) {
+        const closestChamber = findClosestChamber(
+          location.latitude,
+          location.longitude,
+          chambers
+        );
+        
+        return {
+          location,
+          chamber: closestChamber,
+        };
+      }
+      
+      // Fallback to first Chamber (Wildwood) if location detection fails
+      return {
+        location,
+        chamber: chambers[0] ? { ...chambers[0], distance: 0 } : null,
+      };
+    }),
+  }),
+
   bonus: router({
     getAvailable: protectedProcedure.query(async ({ ctx }) => {
       const dbInstance = await getDb();

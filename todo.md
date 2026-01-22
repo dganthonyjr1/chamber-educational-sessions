@@ -134,3 +134,21 @@
 - [ ] Ensure all text is readable on mobile
 - [ ] Ensure all buttons are tappable on mobile
 - [ ] Fix any layout overflow issues on small screens
+
+## Organization Clarity Fix
+- [x] Update "Local Chamber of Commerce" to "Wildwood Chamber of Commerce" (or specific Chamber name)
+- [x] Add location context to all organization names
+- [x] Change "Join" buttons to link to actual organization signup URLs
+- [x] Update database with specific organization names and real signup links
+- [x] Ensure users know which Chamber/organization they're joining
+
+## Chamber Location Detection
+- [x] Add IP geolocation API integration to detect user's city and state
+- [ ] Create database table for US Chambers with city, state, and signup URLs
+- [x] Seed database with sample Chambers across different US locations
+- [x] Seed all 21 NJ county Chambers with locations
+- [x] Implement proximity-based Chamber matching (closest Chamber to user)
+- [x] Implement Chamber matching logic based on user location
+- [x] Show user's local Chamber instead of Wildwood Chamber
+- [ ] Add fallback to default Chamber if location can't be detected
+- [ ] Test location detection with different IP addresses
