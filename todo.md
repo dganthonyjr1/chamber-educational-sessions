@@ -169,3 +169,9 @@
 - [ ] Upload videos to S3 storage
 - [ ] Link videos to lessons in database
 - [ ] Test video playback on all devices
+
+## Chamber Database Updates
+- [x] Add SHCCNJ (Statewide Hispanic Chamber) to database as 22nd organization
+- [x] Research and add SHCCNJ social media links (LinkedIn, Twitter)
+- [x] Verify all 21 county Chambers are the major/primary ones for each county
+- [x] Update any county Chambers that aren't the largest/most influential
