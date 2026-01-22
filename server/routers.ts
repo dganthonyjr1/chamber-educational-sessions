@@ -424,6 +424,95 @@ export const appRouter = router({
     }),
   }),
 
+  // Public API for ChatGPT Custom GPT integration
+  gpt: router({
+    findChamber: publicProcedure
+      .input(
+        z.object({
+          city: z.string().optional(),
+          state: z.string().optional(),
+          latitude: z.number().optional(),
+          longitude: z.number().optional(),
+        })
+      )
+      .query(async ({ input }) => {
+        const { getLocationFromIP, findClosestChamber } = await import("./geolocation");
+        const chambers = await orgDb.getAllOrganizations();
+
+        // If coordinates provided, use them directly
+        if (input.latitude && input.longitude) {
+          const closestChamber = findClosestChamber(
+            input.latitude,
+            input.longitude,
+            chambers
+          );
+          return {
+            success: true,
+            chamber: closestChamber,
+            searchMethod: "coordinates",
+          };
+        }
+
+        // If city/state provided, find matching Chamber
+        if (input.city && input.state) {
+          const matchingChamber = chambers.find(
+            (c) =>
+              c.city?.toLowerCase() === input.city?.toLowerCase() &&
+              c.state?.toLowerCase() === input.state?.toLowerCase()
+          );
+
+          if (matchingChamber) {
+            return {
+              success: true,
+              chamber: { ...matchingChamber, distance: 0 },
+              searchMethod: "city_state",
+            };
+          }
+
+          // If no exact match, find nearest Chamber to the city
+          // This would require geocoding the city/state to coordinates
+          // For now, return all NJ chambers as suggestions
+          return {
+            success: false,
+            message: `No Chamber found for ${input.city}, ${input.state}. Here are nearby options:`,
+            suggestions: chambers.slice(0, 5),
+            searchMethod: "city_state",
+          };
+        }
+
+        // If no input provided, return all Chambers
+        return {
+          success: true,
+          chambers: chambers,
+          searchMethod: "all",
+        };
+      }),
+
+    listAllChambers: publicProcedure.query(async () => {
+      const chambers = await orgDb.getAllOrganizations();
+      return {
+        success: true,
+        count: chambers.length,
+        chambers: chambers.map((c) => ({
+          id: c.id,
+          name: c.name,
+          city: c.city,
+          state: c.state,
+          website: c.website,
+          signupUrl: c.signupUrl,
+          description: c.description,
+          socialMedia: {
+            linkedin: c.linkedinUrl,
+            facebook: c.facebookUrl,
+            twitter: c.twitterUrl,
+            instagram: c.instagramUrl,
+            tiktok: c.tiktokUrl,
+          },
+        })),
+      };
+    }),
+  }),
+
   bonus: router({
     getAvailable: protectedProcedure.query(async ({ ctx }) => {
       const dbInstance = await getDb();
