@@ -113,14 +113,33 @@ export default function Home() {
 
       {/* Main Content - Mobile Optimized */}
       <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
-        {/* Hero Section - Mobile Optimized */}
-        <div className="text-center mb-8 sm:mb-12">
-          <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-primary via-accent to-chart-4 bg-clip-text text-transparent px-2">
-            {t('home.hero.title')}
-          </h2>
-          <p className="text-base sm:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
+        {/* Hero Section - FirstMovers Inspired */}
+        <div className="text-center mb-16 py-12">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
+            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              {t('home.hero.title')}
+            </span>
+          </h1>
+          <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto px-4 mb-8 leading-relaxed">
             {t('home.hero.subtitle')}
           </p>
+          {!isAuthenticated ? (
+            <Button 
+              onClick={() => window.location.href = getLoginUrl()}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all"
+              size="lg"
+            >
+              {language === 'es' ? 'Comenzar Ahora' : 'Get Started Today'}
+            </Button>
+          ) : (
+            <Button 
+              onClick={() => courses && courses[0] && (window.location.href = `/course/${courses[0].id}`)}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all"
+              size="lg"
+            >
+              {language === 'es' ? 'Continuar Aprendiendo' : 'Continue Learning'}
+            </Button>
+          )}
         </div>
 
         {/* Courses Grid - Mobile Optimized */}
@@ -130,25 +149,28 @@ export default function Home() {
             {t('home.courses.title')}
           </h3>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
             {courses?.map((course) => (
               <Link key={course.id} href={`/course/${course.id}`}>
-                <Card className="bg-card border-border hover:border-primary transition-all cursor-pointer group hover:shadow-lg">
-                  <CardHeader>
-                    <div className="flex items-center justify-between mb-2">
-                      <Badge variant="outline" className="text-primary border-primary">
+                <Card className="bg-card border-border hover:border-primary/50 transition-all duration-300 cursor-pointer group hover:shadow-2xl hover:-translate-y-1 h-full">
+                  <CardHeader className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <Badge className="bg-primary/10 text-primary border-primary/20 font-semibold">
                         Course {course.order}
                       </Badge>
+                      <Badge className="bg-accent/10 text-accent border-accent/20">
+                        {course.order <= 2 ? 'Beginner' : course.order <= 4 ? 'Intermediate' : 'Advanced'}
+                      </Badge>
                     </div>
-                    <CardTitle className="text-card-foreground group-hover:text-primary transition-colors">
+                    <CardTitle className="text-xl font-bold text-card-foreground group-hover:text-primary transition-colors leading-tight">
                       {language === 'es' && course.titleEs ? course.titleEs : course.title}
                     </CardTitle>
-                    <CardDescription className="text-muted-foreground">
+                    <CardDescription className="text-muted-foreground text-base leading-relaxed">
                       {language === 'es' && course.descriptionEs ? course.descriptionEs : course.description}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Button className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90 text-primary-foreground">
+                    <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-6 rounded-lg shadow-md hover:shadow-lg transition-all">
                       {t('home.courses.start')}
                     </Button>
                   </CardContent>
@@ -200,7 +222,7 @@ export default function Home() {
                       <Button
                         onClick={() => window.open(locationData.chamber?.signupUrl!, '_blank')}
                         size="lg"
-                        className="bg-chart-4 hover:opacity-90 text-primary-foreground font-bold"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-lg hover:shadow-xl transition-all"
                       >
                         {t('home.organizations.join')} {language === 'es' ? 'Ahora' : 'Now'} →
                       </Button>

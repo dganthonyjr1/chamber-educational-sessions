@@ -202,3 +202,14 @@
 - [x] Add progress bar for large file uploads
 - [x] Handle videos up to 2GB in size
 - [ ] Test with actual 30-60 minute MP4 files
+
+## FirstMovers.ai-Inspired Redesign
+- [x] Update color scheme to use teal/turquoise green from SIA logo (#14b8a6)
+- [x] Redesign hero section with bolder, more impactful typography
+- [x] Add prominent teal green CTA buttons throughout site
+- [x] Improve course cards with modern layout and shadows
+- [x] Add difficulty level badges to courses (Beginner, Intermediate, Advanced)
+- [x] Increase whitespace and breathing room between sections
+- [x] Make typography hierarchy more pronounced (larger headings)
+- [x] Update button styles with teal green background and rounded corners
+- [x] Test redesign on all pages for consistency
