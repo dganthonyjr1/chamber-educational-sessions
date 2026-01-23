@@ -185,3 +185,20 @@
 ## Bug Fixes
 - [ ] Fix tRPC API error: "Unexpected token '<', "<!doctype "... is not valid JSON"
 - [ ] Investigate why API endpoint is returning HTML instead of JSON
+
+## Video Upload & Playback System
+- [x] Update database schema to add videoUrl field to lessons table
+- [x] Create tRPC procedure for generating presigned S3 upload URLs
+- [x] Create tRPC procedure for updating lesson with video URL
+- [x] Build admin video upload interface with file picker
+- [x] Add video player component to lesson pages
+- [x] Implement video progress tracking for completion
+- [ ] Test video upload with sample MP4 file
+- [ ] Test video playback on desktop and mobile
+- [x] Add video duration display and controls
+
+## Large Video File Support (Up to 1 Hour)
+- [x] Replace base64 upload with presigned S3 URLs for direct uploads
+- [x] Add progress bar for large file uploads
+- [x] Handle videos up to 2GB in size
+- [ ] Test with actual 30-60 minute MP4 files

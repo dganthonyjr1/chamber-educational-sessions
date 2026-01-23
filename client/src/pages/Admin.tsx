@@ -5,23 +5,26 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
-import { Upload, Video } from "lucide-react";
+import { Upload, Video, CheckCircle } from "lucide-react";
 
 export default function Admin() {
   const [selectedCourse, setSelectedCourse] = useState<number | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [formData, setFormData] = useState({
     title: "",
     titleEs: "",
     description: "",
     descriptionEs: "",
     videoFile: null as File | null,
-    thumbnailFile: null as File | null,
   });
 
   const { data: courses } = trpc.courses.list.useQuery();
   const createLesson = trpc.courses.createLesson.useMutation();
+  const uploadVideoDirectly = trpc.lessons.uploadVideoDirectly.useMutation();
+  const confirmVideoUpload = trpc.lessons.confirmVideoUpload.useMutation();
 
   const handleVideoUpload = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,65 +34,123 @@ export default function Admin() {
     }
 
     setUploading(true);
-    try {
-      // Convert files to base64 for upload
-      const videoBase64 = await fileToBase64(formData.videoFile);
-      const thumbnailBase64 = formData.thumbnailFile
-        ? await fileToBase64(formData.thumbnailFile)
-        : null;
+    setUploadProgress(0);
 
-      await createLesson.mutateAsync({
+    try {
+      // Step 1: Create the lesson with placeholder video data
+      const lesson = await createLesson.mutateAsync({
         courseId: selectedCourse,
         title: formData.title,
         titleEs: formData.titleEs,
         description: formData.description,
         descriptionEs: formData.descriptionEs,
-        videoData: videoBase64,
-        videoType: formData.videoFile.type,
-        thumbnailData: thumbnailBase64,
-        thumbnailType: formData.thumbnailFile?.type,
+        videoData: 'data:video/mp4;base64,', // Placeholder
+        videoType: 'video/mp4',
+        thumbnailData: null,
       });
 
-      toast.success("Lesson uploaded successfully!");
+      toast.success("Lesson created! Uploading video...");
+      setUploadProgress(10);
+
+      // Step 2: Get upload endpoint for direct S3 upload
+      const { fileKey, uploadEndpoint } = await uploadVideoDirectly.mutateAsync({
+        lessonId: lesson.id,
+        fileName: formData.videoFile.name,
+        fileSize: formData.videoFile.size,
+        mimeType: formData.videoFile.type,
+      });
+
+      setUploadProgress(20);
+
+      // Step 3: Upload video directly to S3
+      const xhr = new XMLHttpRequest();
+
+      xhr.upload.addEventListener("progress", (e) => {
+        if (e.lengthComputable) {
+          const percentComplete = 20 + (e.loaded / e.total) * 70; // 20-90%
+          setUploadProgress(Math.round(percentComplete));
+        }
+      });
+
+      const uploadPromise = new Promise<string>((resolve, reject) => {
+        xhr.addEventListener("load", async () => {
+          if (xhr.status === 200) {
+            const result = JSON.parse(xhr.responseText);
+            resolve(result.url);
+          } else {
+            reject(new Error(`Upload failed: ${xhr.statusText}`));
+          }
+        });
+
+        xhr.addEventListener("error", () => {
+          reject(new Error("Upload failed"));
+        });
+
+        xhr.open("POST", uploadEndpoint);
+        xhr.setRequestHeader("Content-Type", formData.videoFile!.type);
+        xhr.send(formData.videoFile);
+      });
+
+      const videoUrl = await uploadPromise;
+      setUploadProgress(90);
+
+      // Step 4: Get video duration
+      const duration = await getVideoDuration(formData.videoFile);
+
+      // Step 5: Confirm upload and update lesson
+      await confirmVideoUpload.mutateAsync({
+        lessonId: lesson.id,
+        fileKey,
+        videoUrl,
+        duration,
+      });
+
+      setUploadProgress(100);
+      toast.success("Video uploaded successfully!");
+
+      // Reset form
       setFormData({
         title: "",
         titleEs: "",
         description: "",
         descriptionEs: "",
         videoFile: null,
-        thumbnailFile: null,
       });
+      setUploadProgress(0);
     } catch (error) {
-      toast.error("Failed to upload lesson");
+      toast.error("Failed to upload video");
       console.error(error);
     } finally {
       setUploading(false);
     }
   };
 
-  const fileToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = reject;
+  const getVideoDuration = (file: File): Promise<number> => {
+    return new Promise((resolve) => {
+      const video = document.createElement("video");
+      video.preload = "metadata";
+      video.onloadedmetadata = () => {
+        window.URL.revokeObjectURL(video.src);
+        resolve(Math.round(video.duration));
+      };
+      video.src = URL.createObjectURL(file);
     });
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white p-8">
+    <div className="min-h-screen bg-background text-foreground p-8">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8 bg-gradient-to-r from-[#ff006e] to-[#00d9ff] bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold mb-8 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
           Admin - Upload Course Videos
         </h1>
 
-        <Card className="bg-[#1a1a1a] border-[#ff006e]/20 p-6">
+        <Card className="bg-card border-border p-6">
           <form onSubmit={handleVideoUpload} className="space-y-6">
             {/* Course Selection */}
             <div>
               <Label>Select Course</Label>
               <select
-                className="w-full bg-[#0a0a0a] border border-[#ff006e]/20 rounded-lg p-3 mt-2"
+                className="w-full bg-background border border-border rounded-lg p-3 mt-2 text-foreground"
                 value={selectedCourse || ""}
                 onChange={(e) => setSelectedCourse(Number(e.target.value))}
               >
@@ -106,7 +167,7 @@ export default function Admin() {
             <div>
               <Label>Lesson Title (English)</Label>
               <Input
-                className="bg-[#0a0a0a] border-[#ff006e]/20 mt-2"
+                className="bg-background border-border mt-2"
                 value={formData.title}
                 onChange={(e) =>
                   setFormData({ ...formData, title: e.target.value })
@@ -120,7 +181,7 @@ export default function Admin() {
             <div>
               <Label>Lesson Title (Spanish)</Label>
               <Input
-                className="bg-[#0a0a0a] border-[#ff006e]/20 mt-2"
+                className="bg-background border-border mt-2"
                 value={formData.titleEs}
                 onChange={(e) =>
                   setFormData({ ...formData, titleEs: e.target.value })
@@ -134,7 +195,7 @@ export default function Admin() {
             <div>
               <Label>Description (English)</Label>
               <Textarea
-                className="bg-[#0a0a0a] border-[#ff006e]/20 mt-2"
+                className="bg-background border-border mt-2"
                 value={formData.description}
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
@@ -149,7 +210,7 @@ export default function Admin() {
             <div>
               <Label>Description (Spanish)</Label>
               <Textarea
-                className="bg-[#0a0a0a] border-[#ff006e]/20 mt-2"
+                className="bg-background border-border mt-2"
                 value={formData.descriptionEs}
                 onChange={(e) =>
                   setFormData({ ...formData, descriptionEs: e.target.value })
@@ -162,12 +223,12 @@ export default function Admin() {
 
             {/* Video Upload */}
             <div>
-              <Label>Video File (60+ minutes supported)</Label>
-              <div className="mt-2 border-2 border-dashed border-[#ff006e]/20 rounded-lg p-6 text-center">
-                <Video className="w-12 h-12 mx-auto mb-2 text-[#ff006e]" />
+              <Label>Video File (Supports up to 1 hour / 2GB)</Label>
+              <div className="mt-2 border-2 border-dashed border-primary/30 rounded-lg p-6 text-center">
+                <Video className="w-12 h-12 mx-auto mb-2 text-primary" />
                 <Input
                   type="file"
-                  accept="video/*"
+                  accept="video/mp4,video/webm,video/ogg"
                   onChange={(e) =>
                     setFormData({
                       ...formData,
@@ -185,7 +246,7 @@ export default function Admin() {
                   </Button>
                 </label>
                 {formData.videoFile && (
-                  <p className="mt-2 text-sm text-[#00d9ff]">
+                  <p className="mt-2 text-sm text-accent">
                     {formData.videoFile.name} (
                     {(formData.videoFile.size / 1024 / 1024).toFixed(2)} MB)
                   </p>
@@ -193,43 +254,31 @@ export default function Admin() {
               </div>
             </div>
 
-            {/* Thumbnail Upload */}
-            <div>
-              <Label>Thumbnail Image (Optional)</Label>
-              <div className="mt-2 border-2 border-dashed border-[#00d9ff]/20 rounded-lg p-6 text-center">
-                <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      thumbnailFile: e.target.files?.[0] || null,
-                    })
-                  }
-                  className="hidden"
-                  id="thumbnail-upload"
-                />
-                <label htmlFor="thumbnail-upload" className="cursor-pointer">
-                  <Button type="button" variant="outline" className="mt-2">
-                    <Upload className="w-4 h-4 mr-2" />
-                    Choose Thumbnail
-                  </Button>
-                </label>
-                {formData.thumbnailFile && (
-                  <p className="mt-2 text-sm text-[#00d9ff]">
-                    {formData.thumbnailFile.name}
-                  </p>
-                )}
+            {/* Upload Progress */}
+            {uploading && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span>Uploading video...</span>
+                  <span>{uploadProgress}%</span>
+                </div>
+                <Progress value={uploadProgress} className="w-full" />
               </div>
-            </div>
+            )}
 
             {/* Submit Button */}
             <Button
               type="submit"
+              className="w-full bg-primary text-primary-foreground hover:opacity-90"
               disabled={uploading}
-              className="w-full bg-gradient-to-r from-[#ff006e] to-[#00d9ff] hover:opacity-90"
             >
-              {uploading ? "Uploading..." : "Upload Lesson"}
+              {uploading ? (
+                <>Uploading... {uploadProgress}%</>
+              ) : (
+                <>
+                  <CheckCircle className="w-4 h-4 mr-2" />
+                  Upload Lesson & Video
+                </>
+              )}
             </Button>
           </form>
         </Card>

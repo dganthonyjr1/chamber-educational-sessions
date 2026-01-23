@@ -36,6 +36,55 @@ async function startServer() {
   // OAuth callback under /api/oauth/callback
   registerOAuthRoutes(app);
   
+  // Storage upload endpoint for large files
+  app.post("/api/storage/upload", async (req, res) => {
+    try {
+      const { key } = req.query;
+      if (!key || typeof key !== 'string') {
+        return res.status(400).json({ error: 'Missing file key parameter' });
+      }
+
+      const { ENV } = await import("./env");
+      const baseUrl = ENV.forgeApiUrl;
+      const apiKey = ENV.forgeApiKey;
+
+      if (!baseUrl || !apiKey) {
+        return res.status(500).json({ error: 'Storage not configured' });
+      }
+
+      // Forward the upload to the storage service
+      const uploadUrl = new URL("v1/storage/upload", baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`);
+      uploadUrl.searchParams.set("path", key);
+
+      const formData = new FormData();
+      // Get the file from request body
+      const chunks: Buffer[] = [];
+      req.on('data', (chunk) => chunks.push(chunk));
+      req.on('end', async () => {
+        const buffer = Buffer.concat(chunks);
+        const blob = new Blob([buffer], { type: req.headers['content-type'] || 'video/mp4' });
+        formData.append('file', blob, key.split('/').pop() || 'video.mp4');
+
+        const response = await fetch(uploadUrl, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${apiKey}` },
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const error = await response.text();
+          return res.status(response.status).json({ error });
+        }
+
+        const result = await response.json();
+        res.json(result);
+      });
+    } catch (error) {
+      console.error('[Storage Upload Error]', error);
+      res.status(500).json({ error: 'Upload failed' });
+    }
+  });
+
   // REST API endpoints for ChatGPT Custom GPT integration
   app.get("/api/gpt/chambers", async (req, res) => {
     try {

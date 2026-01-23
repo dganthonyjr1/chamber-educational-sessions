@@ -204,6 +204,44 @@ export const appRouter = router({
         
         return { url };
       }),
+
+    // For large video files (up to 1 hour), use direct upload
+    uploadVideoDirectly: protectedProcedure
+      .input(z.object({
+        lessonId: z.number(),
+        fileName: z.string(),
+        fileSize: z.number(),
+        mimeType: z.string(),
+      }))
+      .mutation(async ({ input }) => {
+        // Generate unique file key
+        const fileExt = input.fileName.split('.').pop() || 'mp4';
+        const fileKey = `lessons/${input.lessonId}/video-${nanoid()}.${fileExt}`;
+        
+        // Return the file key and upload endpoint
+        // Frontend will upload directly to S3 via the storage API
+        return {
+          fileKey,
+          uploadEndpoint: `/api/storage/upload?key=${encodeURIComponent(fileKey)}`,
+        };
+      }),
+
+    confirmVideoUpload: protectedProcedure
+      .input(z.object({
+        lessonId: z.number(),
+        fileKey: z.string(),
+        videoUrl: z.string(),
+        duration: z.number().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        await db.updateLesson(input.lessonId, {
+          videoUrl: input.videoUrl,
+          videoKey: input.fileKey,
+          videoDuration: input.duration,
+        });
+        
+        return { success: true };
+      }),
   }),
 
   quiz: router({
@@ -264,6 +302,12 @@ export const appRouter = router({
       .input(z.object({ courseId: z.number() }))
       .query(async ({ input, ctx }) => {
         return await db.getUserProgressByCourse(ctx.user.id, input.courseId);
+      }),
+
+    get: protectedProcedure
+      .input(z.object({ lessonId: z.number() }))
+      .query(async ({ input, ctx }) => {
+        return await db.getUserProgress(ctx.user.id, input.lessonId);
       }),
   }),
 
