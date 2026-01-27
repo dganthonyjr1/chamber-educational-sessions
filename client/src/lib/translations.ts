@@ -11,7 +11,7 @@ export const translations = {
     
     // Home Page - Hero
     "home.hero.title": "Transform Your Business with AI",
-    "home.hero.subtitle": "Join 45+ Chamber members learning to leverage AI for growth, efficiency, and innovation",
+    "home.hero.subtitle": "Join Established Business Owners learning to leverage AI for growth, efficiency, and innovation",
     
     // Home Page - Courses
     "home.courses.title": "Learning Paths",
@@ -153,7 +153,7 @@ export const translations = {
     
     // Home Page - Hero
     "home.hero.title": "Transforma Tu Negocio con IA",
-    "home.hero.subtitle": "Únete a más de 45 miembros de la Cámara aprendiendo a aprovechar la IA para crecimiento, eficiencia e innovación",
+    "home.hero.subtitle": "Únete a Propietarios de Empresas Establecidas aprendiendo a aprovechar la IA para crecimiento, eficiencia e innovación",
     
     // Home Page - Courses
     "home.courses.title": "Rutas de Aprendizaje",
