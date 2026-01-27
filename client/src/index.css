@@ -43,41 +43,41 @@
 }
 
 :root {
-  /* Modern Tech Theme - Teal Green from SIA Logo */
-  --primary: oklch(0.60 0.15 180); /* Teal green #14b8a6 */
-  --primary-foreground: oklch(0.98 0.01 180); /* White */
-  --sidebar-primary: oklch(0.60 0.12 200); /* Turquoise */
-  --sidebar-primary-foreground: oklch(0.98 0.01 220);
-  --chart-1: oklch(0.70 0.12 200); /* Seafoam */
-  --chart-2: oklch(0.60 0.15 220); /* Ocean */
-  --chart-3: oklch(0.50 0.18 240); /* Deep blue */
-  --chart-4: oklch(0.65 0.15 30); /* Coral */
-  --chart-5: oklch(0.70 0.12 60); /* Golden sand */
+  /* SIA Brand Colors - Magenta, Cyan, Purple on White */
+  --primary: oklch(0.55 0.28 340); /* Hot Pink/Magenta #FF006E */
+  --primary-foreground: oklch(0.98 0.01 0); /* White */
+  --sidebar-primary: oklch(0.65 0.20 290); /* Purple #8B5CF6 */
+  --sidebar-primary-foreground: oklch(0.98 0.01 290);
+  --chart-1: oklch(0.70 0.25 195); /* Cyan #00D9FF */
+  --chart-2: oklch(0.55 0.28 340); /* Magenta */
+  --chart-3: oklch(0.65 0.20 290); /* Purple */
+  --chart-4: oklch(0.75 0.25 195); /* Light Cyan */
+  --chart-5: oklch(0.60 0.25 340); /* Deep Magenta */
   --radius: 0.75rem;
-  /* Pure white background with light teal accents */
+  /* Pure white background */
   --background: oklch(1.0 0 0); /* Pure white */
   --foreground: oklch(0.20 0.02 240); /* Dark text for contrast */
-  /* Cards with very light teal tint */
-  --card: oklch(0.99 0.01 180); /* Very light teal */
+  /* Cards with subtle tint */
+  --card: oklch(0.99 0.01 340); /* Very light magenta tint */
   --card-foreground: oklch(0.25 0.02 240);
-  --popover: oklch(0.98 0.01 70);
+  --popover: oklch(0.98 0.01 340);
   --popover-foreground: oklch(0.25 0.02 240);
-  /* Light teal secondary */
-  --secondary: oklch(0.95 0.03 180); /* Very light teal */
+  /* Cyan secondary */
+  --secondary: oklch(0.95 0.05 195); /* Light cyan */
   --secondary-foreground: oklch(0.30 0.02 240);
-  --muted: oklch(0.96 0.02 180); /* Muted teal */
+  --muted: oklch(0.96 0.02 290); /* Muted purple */
   --muted-foreground: oklch(0.50 0.05 240);
-  /* Teal accent */
-  --accent: oklch(0.70 0.15 175); /* Bright teal */
-  --accent-foreground: oklch(0.98 0.01 175);
+  /* Cyan accent */
+  --accent: oklch(0.70 0.25 195); /* Bright cyan */
+  --accent-foreground: oklch(0.98 0.01 195);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
-  /* Soft teal borders */
-  --border: oklch(0.90 0.02 180); /* Light teal border */
-  --input: oklch(0.96 0.01 180);
-  --ring: oklch(0.60 0.15 180); /* Teal ring */
-  /* Sidebar with light teal theme */
-  --sidebar: oklch(0.98 0.02 180); /* Light teal */
+  /* Subtle borders */
+  --border: oklch(0.90 0.02 340); /* Light magenta border */
+  --input: oklch(0.96 0.01 340);
+  --ring: oklch(0.55 0.28 340); /* Magenta ring */
+  /* Sidebar with purple theme */
+  --sidebar: oklch(0.98 0.02 290); /* Light purple */
   --sidebar-foreground: oklch(0.25 0.02 240);
   --sidebar-accent: oklch(0.90 0.05 200);
   --sidebar-accent-foreground: oklch(0.30 0.02 240);
