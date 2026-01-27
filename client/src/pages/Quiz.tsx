@@ -86,7 +86,7 @@ export default function Quiz() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <Loader2 className="animate-spin h-8 w-8 text-[#ff006e]" />
+        <Loader2 className="animate-spin h-8 w-8 text-primary" />
       </div>
     );
   }
@@ -98,7 +98,7 @@ export default function Quiz() {
           <CardContent className="p-12 text-center">
             <p className="text-gray-400 mb-4">No quiz questions available for this course yet.</p>
             <Link href={`/course/${courseId}`}>
-              <Button className="bg-gradient-to-r from-[#ff006e] to-[#00d9ff]">
+              <Button className="bg-primary">
                 Back to Course
               </Button>
             </Link>
@@ -127,7 +127,7 @@ export default function Quiz() {
             </h2>
 
             <p className="text-xl text-gray-300 mb-8">
-              You scored <span className="text-[#ff006e] font-bold">{score}</span> points!
+              You scored <span className="text-primary font-bold">{score}</span> points!
             </p>
 
             <div className="grid grid-cols-3 gap-4 mb-8">
@@ -137,7 +137,7 @@ export default function Quiz() {
               </div>
               <div className="bg-gray-800 p-4 rounded-lg">
                 <p className="text-sm text-gray-400 mb-1">Accuracy</p>
-                <p className="text-2xl font-bold text-[#00d9ff]">{percentage.toFixed(0)}%</p>
+                <p className="text-2xl font-bold text-accent">{percentage.toFixed(0)}%</p>
               </div>
               <div className="bg-gray-800 p-4 rounded-lg">
                 <p className="text-sm text-gray-400 mb-1">Best Streak</p>
@@ -161,7 +161,7 @@ export default function Quiz() {
                 </Button>
               </Link>
               <Link href="/">
-                <Button className="bg-gradient-to-r from-[#ff006e] to-[#00d9ff]">
+                <Button className="bg-primary">
                   Continue Learning
                 </Button>
               </Link>
@@ -188,7 +188,7 @@ export default function Quiz() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Badge variant="outline" className="text-[#00d9ff] border-[#00d9ff]">
+              <Badge variant="outline" className="text-accent border-accent">
                 Question {currentQuestionIndex + 1}/{totalQuestions}
               </Badge>
               <Badge variant="outline" className={`${
@@ -202,7 +202,7 @@ export default function Quiz() {
 
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2 px-3 py-2 bg-gray-900 rounded-lg">
-                <Trophy className="h-4 w-4 text-[#ff006e]" />
+                <Trophy className="h-4 w-4 text-primary" />
                 <span className="text-sm font-semibold">{score}</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-2 bg-gray-900 rounded-lg">
@@ -215,7 +215,7 @@ export default function Quiz() {
           {/* Progress Bar */}
           <div className="mt-4 bg-gray-800 h-2 rounded-full overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-[#ff006e] to-[#00d9ff] transition-all duration-300"
+              className="h-full bg-primary transition-all duration-300"
               style={{ width: `${((currentQuestionIndex + 1) / totalQuestions) * 100}%` }}
             />
           </div>
@@ -243,7 +243,7 @@ export default function Quiz() {
                     className={`w-full p-4 rounded-lg border-2 text-left transition-all ${
                       showCorrect ? 'border-green-500 bg-green-500/20' :
                       showIncorrect ? 'border-red-500 bg-red-500/20' :
-                      isSelected ? 'border-[#ff006e] bg-[#ff006e]/10' :
+                      isSelected ? 'border-primary bg-primary/10' :
                       'border-gray-700 bg-gray-800 hover:border-gray-600'
                     } ${showFeedback ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                   >
@@ -252,7 +252,7 @@ export default function Quiz() {
                         <span className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
                           showCorrect ? 'bg-green-500 text-white' :
                           showIncorrect ? 'bg-red-500 text-white' :
-                          isSelected ? 'bg-[#ff006e] text-white' :
+                          isSelected ? 'bg-primary text-white' :
                           'bg-gray-700 text-gray-300'
                         }`}>
                           {option.letter}
@@ -280,14 +280,14 @@ export default function Quiz() {
                 <Button
                   onClick={handleSubmitAnswer}
                   disabled={!selectedAnswer}
-                  className="bg-gradient-to-r from-[#ff006e] to-[#00d9ff] hover:opacity-90 disabled:opacity-50"
+                  className="bg-primary hover:opacity-90 disabled:opacity-50"
                 >
                   Submit Answer
                 </Button>
               ) : (
                 <Button
                   onClick={handleNextQuestion}
-                  className="bg-gradient-to-r from-[#ff006e] to-[#00d9ff] hover:opacity-90"
+                  className="bg-primary hover:opacity-90"
                 >
                   {currentQuestionIndex < totalQuestions - 1 ? (
                     <>
