@@ -218,3 +218,11 @@
 - [x] Change background from beige to pure white
 - [x] Add light teal accents throughout the design
 - [x] Ensure text remains readable with new color scheme
+
+## Revenue Share Section
+- [x] Create dedicated Partnership/Revenue Share page
+- [x] Add 15% community revenue share details
+- [x] Add 50% Chamber discount information
+- [x] Include payment terms and conditions
+- [x] Add revenue share section to homepage
+- [ ] Link to Partnership page from footer and navigation

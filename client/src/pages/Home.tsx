@@ -307,6 +307,66 @@ export default function Home() {
           </section>
         )}
 
+        {/* Revenue Share Section */}
+        <section className="mb-16">
+          <div className="max-w-4xl mx-auto">
+            <Card className="border-2 border-primary/30 shadow-xl bg-gradient-to-br from-primary/5 to-accent/5">
+              <CardContent className="p-10">
+                <div className="text-center mb-8">
+                  <h2 className="text-4xl font-extrabold mb-4">
+                    <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                      {language === 'es' ? 'Asociación Mutuamente Beneficiosa' : 'Mutually Beneficial Partnership'}
+                    </span>
+                  </h2>
+                  <p className="text-xl text-muted-foreground">
+                    {language === 'es'
+                      ? 'Genere ingresos para su Cámara mientras ofrece educación en IA de clase mundial a sus miembros.'
+                      : 'Generate revenue for your Chamber while delivering world-class AI education to your members.'}
+                  </p>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6 mb-8">
+                  <div className="bg-background/50 p-6 rounded-xl border-2 border-primary/20">
+                    <div className="text-center">
+                      <div className="text-5xl font-extrabold text-primary mb-2">15%</div>
+                      <h3 className="text-xl font-bold mb-3">
+                        {language === 'es' ? 'Participación en Ingresos' : 'Revenue Share'}
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        {language === 'es'
+                          ? 'Gane el 15% de los ingresos netos recurrentes de suscripción generados por los miembros de su Cámara que se inscriban en servicios premium de SIA.'
+                          : 'Earn 15% of net recurring subscription revenue generated from your Chamber members who enroll in premium SIA services.'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="bg-background/50 p-6 rounded-xl border-2 border-accent/20">
+                    <div className="text-center">
+                      <div className="text-5xl font-extrabold text-accent mb-2">50%</div>
+                      <h3 className="text-xl font-bold mb-3">
+                        {language === 'es' ? 'Descuento para la Cámara' : 'Chamber Discount'}
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        {language === 'es'
+                          ? 'Su Cámara recibe un 50% de descuento en todos los servicios comprados directamente durante la duración del acuerdo.'
+                          : 'Your Chamber receives a 50% discount on all services purchased directly for the duration of the agreement.'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-center">
+                  <Link href="/partnership">
+                    <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-10 py-7 rounded-xl font-bold shadow-xl">
+                      {language === 'es' ? 'Ver Detalles Completos' : 'View Full Details'} →
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
         {/* Other Partner Chambers */}
         {organizations && organizations.length > 0 && (
           <section className="mb-12">

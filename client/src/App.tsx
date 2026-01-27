@@ -9,6 +9,7 @@ import Admin from "./pages/Admin";
 import Course from "./pages/Course";
 import Quiz from "./pages/Quiz";
 import Lesson from "./pages/Lesson";
+import Partnership from "./pages/Partnership";
 import MagicAuth from "./pages/MagicAuth";
 
 function Router() {
@@ -19,6 +20,7 @@ function Router() {
       <Route path={"/admin"} component={Admin} />
       <Route path="/course/:id" component={Course} />
       <Route path="/lesson/:id" component={Lesson} />
+      <Route path="/partnership" component={Partnership} />
       <Route path="/quiz/:courseId" component={Quiz} />
       <Route path="/auth/:token" component={MagicAuth} />
       <Route path={"/404"} component={NotFound} />
