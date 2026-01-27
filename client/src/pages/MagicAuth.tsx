@@ -53,7 +53,7 @@ export default function MagicAuth() {
         <CardContent className="p-12 text-center">
           {status === 'verifying' && (
             <>
-              <Loader2 className="animate-spin h-16 w-16 text-[#ff006e] mx-auto mb-6" />
+              <Loader2 className="animate-spin h-16 w-16 text-primary mx-auto mb-6" />
               <h2 className="text-2xl font-bold mb-2">Verifying Your Access</h2>
               <p className="text-gray-400">Please wait while we authenticate your magic link...</p>
             </>
@@ -70,7 +70,7 @@ export default function MagicAuth() {
               </p>
               
               {showVoiceGuide && (
-                <div className="bg-gradient-to-r from-[#ff006e]/10 to-[#00d9ff]/10 border border-[#ff006e]/30 rounded-lg p-6 mb-6">
+                <div className="bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/30 rounded-lg p-6 mb-6">
                   <p className="text-sm text-gray-300 mb-4">
                     🎙️ <strong>Voice Guide Ready!</strong><br />
                     Click the phone button in the bottom right to talk with your AI learning coach.
@@ -84,7 +84,7 @@ export default function MagicAuth() {
 
               <Button
                 onClick={() => setLocation('/')}
-                className="bg-gradient-to-r from-[#ff006e] to-[#00d9ff] hover:opacity-90"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground"
               >
                 Start Learning
               </Button>

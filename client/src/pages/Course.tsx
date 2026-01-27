@@ -26,7 +26,7 @@ export default function Course() {
   if (courseLoading || lessonsLoading) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
-        <Loader2 className="animate-spin h-8 w-8 text-[#ff006e]" />
+        <Loader2 className="animate-spin h-8 w-8 text-primary" />
       </div>
     );
   }
@@ -37,7 +37,7 @@ export default function Course() {
       <header className="border-b border-gray-800 bg-black/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/">
-            <Button variant="ghost" className="text-white hover:text-[#ff006e]">
+            <Button variant="ghost" className="text-white hover:text-primary">
               ← Back to Academy
             </Button>
           </Link>
@@ -45,7 +45,7 @@ export default function Course() {
           {isAuthenticated && (
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-2 px-3 py-2 bg-gray-900 rounded-lg">
-                <Trophy className="h-4 w-4 text-[#ff006e]" />
+                <Trophy className="h-4 w-4 text-primary" />
                 <span className="text-sm font-semibold">{user?.totalScore || 0}</span>
               </div>
             </div>
@@ -54,9 +54,9 @@ export default function Course() {
       </header>
 
       {/* Course Header */}
-      <div className="bg-gradient-to-r from-[#ff006e]/20 to-[#00d9ff]/20 border-b border-gray-800">
+      <div className="bg-gradient-to-r from-primary/20 to-accent/20 border-b border-gray-800">
         <div className="container mx-auto px-4 py-12">
-          <Badge variant="outline" className="text-[#00d9ff] border-[#00d9ff] mb-4">
+          <Badge variant="outline" className="text-accent border-accent mb-4">
             Course {course?.order}
           </Badge>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">{course?.title}</h1>
@@ -91,7 +91,7 @@ export default function Course() {
 
                 return (
                   <Link key={lesson.id} href={`/lesson/${lesson.id}`}>
-                    <Card className="bg-gray-900 border-gray-800 hover:border-[#ff006e] transition-all cursor-pointer group">
+                    <Card className="bg-gray-900 border-gray-800 hover:border-primary transition-all cursor-pointer group">
                       <CardContent className="p-6">
                         <div className="flex items-start gap-4">
                           {/* Thumbnail */}
@@ -111,7 +111,7 @@ export default function Course() {
                           <div className="flex-1">
                             <div className="flex items-start justify-between mb-2">
                               <div>
-                                <h3 className="text-lg font-semibold group-hover:text-[#ff006e] transition-colors">
+                                <h3 className="text-lg font-semibold group-hover:text-primary transition-colors">
                                   {index + 1}. {lesson.title}
                                 </h3>
                                 <p className="text-sm text-gray-400 mt-1">
@@ -122,7 +122,7 @@ export default function Course() {
                               {isCompleted ? (
                                 <CheckCircle className="h-6 w-6 text-green-500 flex-shrink-0" />
                               ) : isAuthenticated ? (
-                                <PlayCircle className="h-6 w-6 text-[#00d9ff] flex-shrink-0" />
+                                <PlayCircle className="h-6 w-6 text-accent flex-shrink-0" />
                               ) : (
                                 <Lock className="h-6 w-6 text-gray-600 flex-shrink-0" />
                               )}
@@ -155,10 +155,10 @@ export default function Course() {
 
         {/* Quiz Section */}
         <section>
-          <Card className="bg-gradient-to-r from-[#ff006e]/10 to-[#00d9ff]/10 border-[#ff006e]">
+          <Card className="bg-gradient-to-r from-primary/10 to-accent/10 border-primary">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Trophy className="h-6 w-6 text-[#ff006e]" />
+                <Trophy className="h-6 w-6 text-primary" />
                 Course Quiz Challenge
               </CardTitle>
               <CardDescription className="text-gray-300">
@@ -167,7 +167,7 @@ export default function Course() {
             </CardHeader>
             <CardContent>
               <Link href={`/quiz/${courseId}`}>
-                <Button className="bg-gradient-to-r from-[#ff006e] to-[#00d9ff] hover:opacity-90">
+                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                   Take Quiz
                 </Button>
               </Link>

@@ -101,7 +101,7 @@ export default function Home() {
             ) : (
               <Button 
                 onClick={() => window.location.href = getLoginUrl()}
-                className="bg-gradient-to-r from-[#ff006e] to-[#00d9ff] hover:opacity-90"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground"
               >
                 Sign In
               </Button>
@@ -427,7 +427,7 @@ export default function Home() {
           <Button
             onClick={() => setShowShareMenu(!showShareMenu)}
             variant="outline"
-            className="border-[#ff006e] text-[#ff006e] hover:bg-[#ff006e] hover:text-white"
+            className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
           >
             <Share2 className="h-4 w-4 mr-2" />
             {t('home.share.title')}
@@ -457,12 +457,12 @@ export default function Home() {
         {/* Footer */}
         <footer className="mt-16 pt-8 border-t border-gray-800 text-center">
           <div className="flex justify-center items-center gap-2 text-sm text-gray-400">
-            <Video className="h-4 w-4 text-[#ff006e]" />
+            <Video className="h-4 w-4 text-primary" />
             <a 
               href="https://docs.google.com/videos/d/18ya6FWoDUtOi640czhYPJ_S91BcXxrIb7rZxa6Ys6os/edit?usp=sharing"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-[#ff006e] transition-colors"
+              className="hover:text-primary transition-colors"
             >
               {language === 'es' ? 'Ver Video de Introducción' : 'Watch Introduction Video'}
             </a>
@@ -481,7 +481,7 @@ export default function Home() {
           className={`shadow-lg flex items-center gap-1.5 px-3 py-2 text-sm ${
             isCallActive 
               ? 'bg-red-600 hover:bg-red-700 animate-pulse' 
-              : 'bg-[#ff006e] hover:bg-[#e6005e]'
+              : 'bg-primary hover:bg-primary/90'
           }`}
         >
           <Phone className={`h-4 w-4 ${isAgentSpeaking ? 'animate-bounce' : ''}`} />
@@ -496,7 +496,7 @@ export default function Home() {
         <Button
           onClick={openChatGPT}
           size="sm"
-          className="bg-[#00d9ff] hover:bg-[#00c2e6] shadow-lg flex items-center gap-1.5 px-3 py-2 text-sm text-black"
+          className="bg-accent hover:bg-accent/90 shadow-lg flex items-center gap-1.5 px-3 py-2 text-sm text-accent-foreground"
         >
           <MessageSquare className="h-4 w-4" />
           <span className="font-medium">ChatGPT</span>

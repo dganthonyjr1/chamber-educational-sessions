@@ -14,7 +14,7 @@ export function LanguageToggle() {
       onClick={toggleLanguage}
       variant="ghost"
       size="sm"
-      className="gap-2 text-white hover:text-[#ff006e]"
+      className="gap-2 text-white hover:text-primary"
     >
       <Languages className="h-4 w-4" />
       <span className="font-semibold">{language === "en" ? "ES" : "EN"}</span>
